@@ -1,4 +1,7 @@
-<?php include 'includes/header.php'; ?>
+<?php 
+include 'includes/db.php';
+include 'includes/header.php'; 
+?>
 
 <div class="hero">
     <div class="container mobile-stack">
@@ -33,35 +36,30 @@
             <h2>Offers</h2>
         </div>
         <div class="offers-grid">
-            <!-- Promo Banner 1 -->
-            <div class="promo-card promo-1">
+            <?php
+            $sql = "SELECT * FROM offers ORDER BY created_at DESC LIMIT 3";
+            $result = $conn->query($sql);
+            $i = 0;
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    $i++;
+                    $promo_class = "promo-" . (($i - 1) % 3 + 1);
+            ?>
+            <!-- Dynamic Promo Card -->
+            <div class="promo-card <?php echo $promo_class; ?>">
                 <div class="promo-content">
-                    <span class="promo-tag" style="color: #ff6b6b; background: white;">PROMO</span>
-                    <h3>Save 10% on First Ride</h3>
-                    <p>Use Code: <strong>NEWUSER</strong></p>
+                    <span class="promo-tag" style="color: <?php echo $row['promo_color']; ?>; background: white;"><?php echo $row['promo_tag']; ?></span>
+                    <h3><?php echo $row['title']; ?></h3>
+                    <p><?php echo $row['description']; ?></p>
                 </div>
-                <i class="fas fa-gift promo-icon"></i>
+                <i class="<?php echo $row['icon']; ?> promo-icon"></i>
             </div>
-            
-            <!-- Promo Banner 2 -->
-            <div class="promo-card promo-2">
-                 <div class="promo-content">
-                    <span class="promo-tag" style="color: #00b09b; background: white;">CASHBACK</span>
-                    <h3>Rs. 500 Cashback</h3>
-                    <p>On bookings over Rs. 2000</p>
-                </div>
-                 <i class="fas fa-wallet promo-icon"></i>
-            </div>
-
-             <!-- Promo Banner 3 -->
-            <div class="promo-card promo-3">
-                 <div class="promo-content">
-                    <span class="promo-tag" style="color: #0072ff; background: white;">APP ONLY</span>
-                    <h3>Free Meal</h3>
-                    <p>On selected deluxe buses</p>
-                </div>
-                 <i class="fas fa-utensils promo-icon"></i>
-            </div>
+            <?php 
+                }
+            } else {
+                echo "<p>No offers content available at the moment.</p>";
+            }
+            ?>
         </div>
     </div>
 </div>
@@ -74,31 +72,33 @@
         </div>
         <div class="routes-grid">
             <?php
-            // Simulated popular routes with images
-            $popular_routes = [
-                ['from' => 'Kathmandu', 'to' => 'Pokhara', 'time' => '7 Hours', 'price' => '800', 'image' => 'assets/images/pokhara.png'],
-                ['from' => 'Kathmandu', 'to' => 'Chitwan', 'time' => '5 Hours', 'price' => '700', 'image' => 'assets/images/volvobus.webp'],
-                ['from' => 'Pokhara', 'to' => 'Kathmandu', 'time' => '7 Hours', 'price' => '800', 'image' => 'assets/images/kathmandu1.webp'],
-                ['from' => 'Kathmandu', 'to' => 'Lumbini', 'time' => '9 Hours', 'price' => '1200', 'image' => 'assets/images/bus.png']
-            ];
+            // Fetch popular routes from database
+            $sql = "SELECT * FROM popular_routes ORDER BY created_at DESC LIMIT 4";
+            $result = $conn->query($sql);
 
-            foreach($popular_routes as $route) {
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
             ?>
-            <a href="search.php?from=<?php echo $route['from']; ?>&to=<?php echo $route['to']; ?>&date=<?php echo date('Y-m-d'); ?>" class="route-card">
+            <a href="search.php?from=<?php echo urlencode($row['source']); ?>&to=<?php echo urlencode($row['destination']); ?>&date=<?php echo date('Y-m-d'); ?>" class="route-card">
                 <div class="route-image" style="height: 160px; overflow: hidden; border-radius: 12px 12px 0 0; margin: -25px -25px 15px -25px;">
-                    <img src="<?php echo $route['image']; ?>" alt="<?php echo $route['to']; ?>" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
+                    <img src="<?php echo $row['image_path']; ?>" alt="<?php echo $row['destination']; ?>" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
                 </div>
                 <div class="route-header">
-                    <span class="route-city"><?php echo $route['from']; ?></span>
+                    <span class="route-city"><?php echo $row['source']; ?></span>
                     <i class="fas fa-arrow-right route-arrow"></i>
-                    <span class="route-city"><?php echo $route['to']; ?></span>
+                    <span class="route-city"><?php echo $row['destination']; ?></span>
                 </div>
                 <div class="route-details">
-                    <span><i class="far fa-clock"></i> <?php echo $route['time']; ?></span>
-                    <span class="route-price">Rs. <?php echo $route['price']; ?></span>
+                    <span><i class="far fa-clock"></i> <?php echo $row['duration']; ?></span>
+                    <span class="route-price">Rs. <?php echo $row['price']; ?></span>
                 </div>
             </a>
-            <?php } ?>
+            <?php 
+                }
+            } else {
+                echo "<p>No popular routes added yet.</p>";
+            } 
+            ?>
         </div>
     </div>
 </div>

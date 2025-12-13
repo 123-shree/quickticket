@@ -27,7 +27,10 @@ session_start();
 
 <nav class="navbar">
     <div class="container navbar-content">
-        <a href="index.php" class="brand-logo">Quick<span class="highlight">Ticket</span></a>
+        <a href="index.php" class="brand-logo">
+            <img src="assets/images/logo.png" alt="Quick Ticket Logo" style="height: 70px; width: auto;">
+            Quick<span class="highlight">Ticket</span>
+        </a>
         
         <div class="nav-links">
             <a href="index.php">Home</a>

@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['user_name'] = $row['name'];
             $_SESSION['role'] = $row['role'];
             
-            if ($row['role'] == 'admin') {
+            if ($row['role'] == 'admin' || $row['role'] == 'agent') {
                 header("Location: admin/index.php");
             } else {
                 if(isset($_POST['redirect']) && !empty($_POST['redirect'])) {

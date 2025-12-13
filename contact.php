@@ -1,4 +1,31 @@
-<?php include 'includes/header.php'; ?>
+<?php 
+include 'includes/db.php';
+include 'includes/header.php'; 
+
+$msg = "";
+$msg_class = "";
+
+if (isset($_POST['submit_contact'])) {
+    $name = mysqli_real_escape_string($conn, $_POST['name']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $phone = mysqli_real_escape_string($conn, $_POST['phone']);
+    $message = mysqli_real_escape_string($conn, $_POST['message']);
+
+    if (!empty($name) && !empty($email) && !empty($phone) && !empty($message)) {
+        $sql = "INSERT INTO messages (name, email, phone, message) VALUES ('$name', '$email', '$phone', '$message')";
+        if (mysqli_query($conn, $sql)) {
+            $msg = "Message sent successfully! We will contact you soon.";
+            $msg_class = "alert-success";
+        } else {
+            $msg = "Error: " . mysqli_error($conn);
+            $msg_class = "alert-danger";
+        }
+    } else {
+        $msg = "Please fill in all fields.";
+        $msg_class = "alert-danger";
+    }
+}
+?>
 
 <div class="page-header" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('assets/images/background.jpg'); background-size: cover; background-position: center; color: white;">
     <div class="container">
@@ -57,20 +84,32 @@
             <h3 style="margin-bottom: 10px; color: var(--secondary-color);">Send us a Message</h3>
             <p style="margin-bottom: 30px; color: #666;">We will get back to you within 24 hours.</p>
 
-            <form class="contact-form">
+            <?php if($msg != ""): ?>
+                <div class="alert <?php echo $msg_class; ?>" style="padding: 10px; border-radius: 5px; margin-bottom: 20px; <?php echo $msg_class == 'alert-success' ? 'background-color: #d4edda; color: #155724;' : 'background-color: #f8d7da; color: #721c24;'; ?>">
+                    <?php echo $msg; ?>
+                </div>
+            <?php endif; ?>
+
+            <form class="contact-form" method="POST" action="">
                 <div class="form-group" style="margin-bottom: 20px;">
                     <label for="name" style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--secondary-color);">Full Name</label>
-                    <input type="text" id="name" required style="width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 8px; transition: 0.3s; outline: none;">
+                    <input type="text" id="name" name="name" required style="width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 8px; transition: 0.3s; outline: none;">
                 </div>
                 <div class="form-group" style="margin-bottom: 20px;">
                     <label for="email" style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--secondary-color);">Email Address</label>
-                    <input type="email" id="email" required style="width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 8px; transition: 0.3s; outline: none;">
+                    <input type="email" id="email" name="email" required style="width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 8px; transition: 0.3s; outline: none;">
                 </div>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="phone" style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--secondary-color);">Phone Number (WhatsApp)</label>
+                    <input type="tel" id="phone" name="phone" required style="width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 8px; transition: 0.3s; outline: none;">
+                </div>
+                
+
                 <div class="form-group" style="margin-bottom: 25px;">
                     <label for="message" style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--secondary-color);">Your Message</label>
-                    <textarea id="message" rows="5" required style="width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 8px; transition: 0.3s; outline: none; font-family: inherit;"></textarea>
+                    <textarea id="message" name="message" rows="5" required style="width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 8px; transition: 0.3s; outline: none; font-family: inherit;"></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 15px;">Send Message <i class="fas fa-paper-plane" style="margin-left: 5px;"></i></button>
+                <button type="submit" name="submit_contact" class="btn btn-primary" style="width: 100%; padding: 15px;">Send Message <i class="fas fa-paper-plane" style="margin-left: 5px;"></i></button>
             </form>
         </div>
     </div>

@@ -1,6 +1,10 @@
 <?php
 include '../includes/db.php';
 include 'includes/header.php';
+
+if ($_SESSION['role'] !== 'admin') {
+    die("Access Denied");
+}
 ?>
 
 <h2>Bookings</h2>

@@ -2,7 +2,10 @@
     <div class="container">
         <div class="footer-content">
             <div class="footer-brand">
-                <h3>Quick<span class="highlight">Ticket</span></h3>
+                <h3>
+                    <img src="assets/images/logo.png" alt="Quick Ticket Logo" style="height: 70px; width: auto; vertical-align: middle; margin-right: 10px;">
+                    Quick<span class="highlight">Ticket</span>
+                </h3>
                 <p>Your reliable partner for bus travel across the country.</p>
             </div>
             <div class="footer-links">
@@ -19,10 +22,11 @@
             </div>
             <div>
                  <h4>Follow Us</h4>
-                 <div style="display: flex; gap: 15px;">
-                     <a href="#" style="color: white; font-size: 1.2rem; transition: 0.3s;"><i class="fab fa-facebook"></i></a>
-                     <a href="#" style="color: white; font-size: 1.2rem; transition: 0.3s;"><i class="fab fa-twitter"></i></a>
-                     <a href="#" style="color: white; font-size: 1.2rem; transition: 0.3s;"><i class="fab fa-instagram"></i></a>
+                 <div class="social-icons">
+                     <a href="#"><i class="fab fa-facebook-f"></i></a>
+                     <a href="#"><i class="fab fa-twitter"></i></a>
+                     <a href="#"><i class="fab fa-instagram"></i></a>
+                     <a href="#"><i class="fab fa-linkedin-in"></i></a>
                  </div>
             </div>
         </div>

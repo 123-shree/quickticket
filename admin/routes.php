@@ -40,10 +40,10 @@ if (isset($_GET['delete'])) {
 
 <div class="card">
     <h3>Add New Route</h3>
-    <form method="POST" style="display: grid; grid-template-columns: repeat(3, 1fr) auto; gap: 10px; align-items: end; margin-top: 15px;">
+    <form method="POST" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; align-items: end;">
         <div style="grid-column: span 1;">
             <label>Bus</label>
-            <select name="bus_id" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+            <select name="bus_id" required>
                 <?php
                 $buses = $conn->query("SELECT * FROM buses");
                 while ($bus = $buses->fetch_assoc()) {
@@ -54,25 +54,25 @@ if (isset($_GET['delete'])) {
         </div>
         <div>
             <label>Source</label>
-            <input type="text" name="source" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+            <input type="text" name="source" required>
         </div>
         <div>
             <label>Destination</label>
-            <input type="text" name="destination" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+            <input type="text" name="destination" required>
         </div>
         <div>
             <label>Date</label>
-            <input type="date" name="departure_date" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+            <input type="date" name="departure_date" required>
         </div>
         <div>
             <label>Time</label>
-            <input type="time" name="departure_time" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+            <input type="time" name="departure_time" required>
         </div>
         <div>
             <label>Price (NPR)</label>
-            <input type="number" name="price" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+            <input type="number" name="price" required>
         </div>
-        <button type="submit" name="add_route" class="btn btn-primary" style="height: 40px;">Add Route</button>
+        <button type="submit" name="add_route" class="btn btn-primary" style="height: 42px;">Add Route</button>
     </form>
 </div>
 

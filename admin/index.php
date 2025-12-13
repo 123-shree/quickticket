@@ -2,6 +2,12 @@
 include '../includes/db.php';
 include 'includes/header.php';
 
+if ($_SESSION['role'] !== 'admin') {
+    header("Location: buses.php");
+    exit();
+}
+
+
 // Fetch stats
 $bus_count = $conn->query("SELECT COUNT(*) as count FROM buses")->fetch_assoc()['count'];
 $route_count = $conn->query("SELECT COUNT(*) as count FROM routes")->fetch_assoc()['count'];
@@ -9,7 +15,7 @@ $user_count = $conn->query("SELECT COUNT(*) as count FROM users WHERE role='user
 $booking_count = $conn->query("SELECT COUNT(*) as count FROM bookings")->fetch_assoc()['count'];
 ?>
 
-<h2 style="margin-bottom: 20px;">Dashboard</h2>
+<h2>Dashboard</h2>
 
 <div class="stats-grid">
     <div class="stat-card">
@@ -42,11 +48,13 @@ $booking_count = $conn->query("SELECT COUNT(*) as count FROM bookings")->fetch_a
     </div>
 </div>
 
-<div class="card" style="margin-top: 30px;">
+<div class="card">
     <h3>Quick Actions</h3>
     <div style="margin-top: 15px;">
         <a href="buses.php" class="btn btn-primary">Add New Bus</a>
         <a href="routes.php" class="btn btn-primary">Add New Route</a>
+        <a href="offers.php" class="btn btn-primary">Add New Offer</a>
+        <a href="popular_routes.php" class="btn btn-primary">Add Popular Route</a>
     </div>
 </div>
 

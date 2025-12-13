@@ -15,6 +15,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_bus'])) {
     $sql = "INSERT INTO buses (bus_name, bus_number, bus_type, total_seats) VALUES ('$bus_name', '$bus_number', '$bus_type', '$total_seats')";
     if ($conn->query($sql) === TRUE) {
         $success = "Bus added successfully!";
+        // Redirect to routes page to add routes for this bus immediately
+        header("Location: routes.php?msg=" . urlencode("Bus added successfully! Please add routes for it now."));
+        exit();
     } else {
         $error = "Error: " . $conn->error;
     }
@@ -38,18 +41,18 @@ if (isset($_GET['delete'])) {
 
 <div class="card">
     <h3>Add New Bus</h3>
-    <form method="POST" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr auto; gap: 10px; align-items: end; margin-top: 15px;">
+    <form method="POST" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; align-items: end;">
         <div>
             <label>Bus Name</label>
-            <input type="text" name="bus_name" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+            <input type="text" name="bus_name" required>
         </div>
         <div>
             <label>Bus Number</label>
-            <input type="text" name="bus_number" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+            <input type="text" name="bus_number" required>
         </div>
         <div>
             <label>Type</label>
-            <select name="bus_type" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+            <select name="bus_type">
                 <option value="AC">AC</option>
                 <option value="Deluxe">Deluxe</option>
                 <option value="Sofa">Sofa</option>
@@ -57,9 +60,9 @@ if (isset($_GET['delete'])) {
         </div>
         <div>
             <label>Seats</label>
-            <input type="number" name="total_seats" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+            <input type="number" name="total_seats" required>
         </div>
-        <button type="submit" name="add_bus" class="btn btn-primary">Add Bus</button>
+        <button type="submit" name="add_bus" class="btn btn-primary" style="height: 42px;">Add Bus</button>
     </form>
 </div>
 

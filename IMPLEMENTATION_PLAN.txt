@@ -1,0 +1,157 @@
+# Create Quick Ticket Logo Implementation Plan
+
+## Goal Description
+[COMPLETED] Replace the current text-based "QuickTicket" logo in the website header with a newly generated, attractive image logo featuring a bus.
+
+# Make Contact Form Functional Implementation Plan
+
+## Goal Description
+[COMPLETED] Enable the "Contact Us" form to accept user submissions (Name, Email, Message) and store them in the database for valid record-keeping.
+
+# Implement Admin Message Viewer
+
+## Goal Description
+[COMPLETED] Create a new page in the Admin Panel to view messages submitted by users via the Contact Form.
+
+# Dynamic Content Management
+
+## Goal Description
+[COMPLETED] Allow the admin to manage "Popular Routes" and "Offers" sections on the homepage dynamically via the Admin Panel, including uploading images for routes.
+
+# Implement Edit Functionality
+
+## Goal Description
+Allow the admin to edit existing "Offers" and "Popular Routes".
+
+## Proposed Changes
+
+### Edit Pages
+#### [NEW] [admin/edit_offer.php](file:///f:/xampp/htdocs/busticket/admin/edit_offer.php)
+- Form to edit existing offers. Pre-filled with current data.
+#### [NEW] [admin/edit_popular_route.php](file:///f:/xampp/htdocs/busticket/admin/edit_popular_route.php)
+- Form to edit routes, including logic to keep existing image or upload a new one.
+
+### Admin List Pages
+#### [MODIFY] [admin/offers.php](file:///f:/xampp/htdocs/busticket/admin/offers.php)
+- Add "Edit" button to the table.
+#### [MODIFY] [admin/popular_routes.php](file:///f:/xampp/htdocs/busticket/admin/popular_routes.php)
+- Add "Edit" button to the table.
+
+# Implement Agent Role
+
+## Goal Description
+Create a new "Agent" role. Agents can access the Admin Panel but are restricted to managing Buses and Routes only. Admins can create and manage Agent accounts.
+
+## Proposed Changes
+
+### Database
+- Alter `users` table `role` column to include 'agent'. `ENUM('user', 'admin', 'agent')`.
+
+### Authentication
+#### [MODIFY] [login.php](file:///f:/xampp/htdocs/busticket/login.php)
+- Redirect users with 'agent' role to `admin/index.php`.
+
+### Admin Structure (Access Control)
+#### [MODIFY] [admin/includes/header.php](file:///f:/xampp/htdocs/busticket/admin/includes/header.php)
+- Update session check to allow 'admin' OR 'agent'.
+- Conditionally display sidebar links:
+    - **Admin**: All links.
+    - **Agent**: Only "Buses", "Routes", and "Logout".
+
+### Agent Management
+#### [NEW] [admin/agents.php](file:///f:/xampp/htdocs/busticket/admin/agents.php)
+- Admin-only page to list, add, and delete agents.
+- Form to create a new user with `role = 'agent'`.
+
+### Access Security
+#### [MODIFY] [admin/index.php](file:///f:/xampp/htdocs/busticket/admin/index.php)
+- Restrict stats/dashboard view for agents (optional, or show limited stats).
+#### [MODIFY] [admin/bookings.php](file:///f:/xampp/htdocs/busticket/admin/bookings.php)
+- Restrict access to Admins only.
+#### [MODIFY] [admin/messages.php](file:///f:/xampp/htdocs/busticket/admin/messages.php)
+- Restrict access to Admins only.
+#### [MODIFY] [admin/offers.php](file:///f:/xampp/htdocs/busticket/admin/offers.php)
+- Restrict access to Admins only.
+#### [MODIFY] [admin/popular_routes.php](file:///f:/xampp/htdocs/busticket/admin/popular_routes.php)
+- Restrict access to Admins only.
+
+# Admin Notifications (Badges)
+
+## Goal Description
+Add visible notification badges to the admin sidebar to show counts for important items: Pending Bookings, Unread Messages, Active Offers, and Total Agents.
+
+## Proposed Changes
+
+### Database
+- Alter `messages` table: Add `is_read` column (default 0).
+
+### Admin Header
+#### [MODIFY] [admin/includes/header.php](file:///f:/xampp/htdocs/busticket/admin/includes/header.php)
+- Add PHP logic to fetch counts:
+    - **Pending Bookings**: `payment_status != 'paid'`
+    - **Unread Messages**: `is_read = 0` (or just total if simpler for now)
+    - **Counts**: Agents and Offers.
+- Display CSS badges `.badge` next to sidebar links.
+
+## Verification Plan
+1.  **Visual Check**: Verify badges appear in sidebar.
+2.  **Accuracy**: Verify counts match actual database records.
+
+# Enhance Contact Form
+
+## Goal Description
+Add a mandatory "Phone Number" field to the Contact Us form and integrate a WhatsApp contact option. Admin should be able to see the phone number of the sender.
+
+## Proposed Changes
+
+### Database
+- Alter `messages` table: Add `phone` column (VARCHAR).
+
+### Frontend
+#### [MODIFY] [contact.php](file:///f:/xampp/htdocs/busticket/contact.php)
+- Add `<input type="tel" name="phone" required>` to the form.
+- Update PHP handling to insert `phone` into database.
+- Add a "Chat on WhatsApp" button/link using `https://wa.me/9779867993001`.
+
+### Admin
+#### [MODIFY] [admin/messages.php](file:///f:/xampp/htdocs/busticket/admin/messages.php)
+- Add "Phone" column to the messages table view.
+
+## Verification Plan
+1.  **Form Submission**: Try submitting without phone (should fail). Try with phone (should success).
+2.  **Database**: Check if phone is saved.
+3.  **Admin View**: Check if phone is visible in `admin/messages.php`.
+4.  **WhatsApp**: Click the link and verify it opens WhatsApp.
+
+
+## Verification Plan
+
+### Manual Verification
+1.  **Admin**: Create a new Agent account via `admin/agents.php`.
+2.  **Agent Login**: Log in as the new agent.
+3.  **Access Check**: Verify only "Buses" and "Routes" are visible in sidebar. Try to access `admin/bookings.php` directly via URL and verify denial/redirect.
+4.  **Functionality**: As Agent, add a bus and a route. Verify success.
+
+
+## User Review Required
+> [!NOTE]
+> This will significantly change the look of the admin panel.
+
+## Proposed Changes
+
+### CSS
+#### [NEW] [assets/css/admin_style.css](file:///f:/xampp/htdocs/busticket/assets/css/admin_style.css)
+- Define variables for a premium color palette (Dark sidebar, light content, soft shadows).
+- Style cards, tables, form inputs, and buttons with modern CSS (border-radius, transitions, hover effects).
+
+### Admin Header
+#### [MODIFY] [admin/includes/header.php](file:///f:/xampp/htdocs/busticket/admin/includes/header.php)
+- Remove inline styles.
+- Link `../assets/css/admin_style.css`.
+- Update sidebar structure if necessary for new CSS.
+
+## Verification Plan
+
+### Manual Verification
+1.  **Functionality**: Test editing an offer and a route.
+2.  **Visuals**: Check Dashboard, Lists, and Forms for broken layouts. Ensure sidebar looks good on desktop and mobile.

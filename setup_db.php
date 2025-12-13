@@ -28,7 +28,7 @@ $sql = "CREATE TABLE IF NOT EXISTS users (
     name VARCHAR(50) NOT NULL,
     email VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    role ENUM('user', 'admin') DEFAULT 'user',
+    role ENUM('user', 'admin', 'agent') DEFAULT 'user',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )";
 
@@ -101,6 +101,57 @@ if ($conn->query($sql) === TRUE) {
     echo "Table bookings created successfully<br>";
 } else {
     echo "Error creating table bookings: " . $conn->error . "<br>";
+}
+
+// Messages Table
+$sql = "CREATE TABLE IF NOT EXISTS messages (
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    message TEXT NOT NULL,
+    is_read TINYINT(1) DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)";
+
+if ($conn->query($sql) === TRUE) {
+    echo "Table messages created successfully<br>";
+} else {
+    echo "Error creating table messages: " . $conn->error . "<br>";
+}
+
+// Offers Table
+$sql = "CREATE TABLE IF NOT EXISTS offers (
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    promo_tag VARCHAR(50) NOT NULL,
+    promo_color VARCHAR(20) NOT NULL,
+    icon VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)";
+
+if ($conn->query($sql) === TRUE) {
+    echo "Table offers created successfully<br>";
+} else {
+    echo "Error creating table offers: " . $conn->error . "<br>";
+}
+
+// Popular Routes Table
+$sql = "CREATE TABLE IF NOT EXISTS popular_routes (
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    source VARCHAR(100) NOT NULL,
+    destination VARCHAR(100) NOT NULL,
+    duration VARCHAR(50) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    image_path VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)";
+
+if ($conn->query($sql) === TRUE) {
+    echo "Table popular_routes created successfully<br>";
+} else {
+    echo "Error creating table popular_routes: " . $conn->error . "<br>";
 }
 
 $conn->close();
