@@ -1,4 +1,4 @@
-:root {
+﻿:root {
     --primary-color: #6AECE1;
     --primary-dark: #4BCBc1;
     --secondary-color: #2c3e50;
@@ -599,3 +599,6 @@ ul {
         font-size: 1.6rem;
     }
 }
+/* Password Toggle Styles */
+.password-wrapper { position: relative; }
+.toggle-password { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #666; }

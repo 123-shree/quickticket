@@ -57,7 +57,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
+                <div class="password-wrapper">
+                    <input type="password" id="password" name="password" required>
+                    <i class="fas fa-eye toggle-password"></i>
+                </div>
             </div>
             <?php 
             if(isset($_GET['redirect'])) {
