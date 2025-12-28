@@ -2,6 +2,8 @@
 session_start();
 session_unset();
 session_destroy();
+session_start();
+$_SESSION['flash_msg'] = "You have been logged out successfully.";
 header("Location: index.php");
 exit();
 ?>

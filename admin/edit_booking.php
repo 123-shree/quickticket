@@ -42,7 +42,7 @@ $routes_result = $conn->query($routes_sql);
                             $selected = ($route['id'] == $booking['route_id']) ? 'selected' : '';
                             echo "<option value='{$route['id']}' $selected>
                                     {$route['source']} - {$route['destination']} 
-                                    ({$route['departure_date']} {$route['departure_time']}) - {$route['bus_name']}
+                                    ({$route['departure_date']} " . date('h:i A', strtotime($route['departure_time'])) . ") - {$route['bus_name']}
                                   </option>";
                         }
                     }

@@ -18,28 +18,28 @@ $booking_count = $conn->query("SELECT COUNT(*) as count FROM bookings")->fetch_a
 <h2>Dashboard</h2>
 
 <div class="stats-grid">
-    <div class="stat-card">
+    <div class="stat-card" onclick="location.href='buses.php'" style="cursor: pointer;">
         <div class="stat-icon"><i class="fas fa-bus"></i></div>
         <div>
             <h3><?php echo $bus_count; ?></h3>
             <p>Total Buses</p>
         </div>
     </div>
-    <div class="stat-card">
+    <div class="stat-card" onclick="location.href='routes.php'" style="cursor: pointer;">
         <div class="stat-icon"><i class="fas fa-route"></i></div>
         <div>
             <h3><?php echo $route_count; ?></h3>
             <p>Total Routes</p>
         </div>
     </div>
-    <div class="stat-card">
+    <div class="stat-card" onclick="location.href='users.php'" style="cursor: pointer;">
         <div class="stat-icon"><i class="fas fa-users"></i></div>
         <div>
             <h3><?php echo $user_count; ?></h3>
             <p>Registered Users</p>
         </div>
     </div>
-    <div class="stat-card">
+    <div class="stat-card" onclick="location.href='bookings.php'" style="cursor: pointer;">
         <div class="stat-icon"><i class="fas fa-ticket-alt"></i></div>
         <div>
             <h3><?php echo $booking_count; ?></h3>

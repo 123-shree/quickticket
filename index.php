@@ -103,4 +103,87 @@ include 'includes/header.php';
     </div>
 </div>
 
+
+<!-- Amenities Section -->
+<div class="section-padding" style="background: #f8f9fa;">
+    <div class="container">
+        <div class="section-title">
+            <h2>Experience the Best</h2>
+            <p>We provide top-notch facilities to make your journey memorable.</p>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-bottom: 60px;">
+            <div style="background: white; padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; border-bottom: 4px solid #4CAF50;">
+                <div style="width: 60px; height: 60px; background: #e8f5e9; color: #4CAF50; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin: 0 auto 20px;">
+                    <i class="fas fa-wifi"></i>
+                </div>
+                <h3 style="margin-bottom: 10px; color: var(--secondary-color);">Free Wi-Fi</h3>
+                <p style="color: #666;">Stay connected with high-speed internet throughout your journey.</p>
+            </div>
+
+            <div style="background: white; padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; border-bottom: 4px solid #FF9800;">
+                <div style="width: 60px; height: 60px; background: #fff3e0; color: #FF9800; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin: 0 auto 20px;">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3 style="margin-bottom: 10px; color: var(--secondary-color);">Charging Hubs</h3>
+                <p style="color: #666;">Personal USB charging ports at every seat for your devices.</p>
+            </div>
+
+            <div style="background: white; padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; border-bottom: 4px solid #F44336;">
+                <div style="width: 60px; height: 60px; background: #ffebee; color: #F44336; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin: 0 auto 20px;">
+                    <i class="fas fa-utensils"></i>
+                </div>
+                <h3 style="margin-bottom: 10px; color: var(--secondary-color);">Onboard Snacks</h3>
+                <p style="color: #666;">Complimentary water and light snacks on VIP and Deluxe trips.</p>
+            </div>
+
+            <div style="background: white; padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; border-bottom: 4px solid #2196F3;">
+                <div style="width: 60px; height: 60px; background: #e3f2fd; color: #2196F3; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin: 0 auto 20px;">
+                    <i class="fas fa-couch"></i>
+                </div>
+                <h3 style="margin-bottom: 10px; color: var(--secondary-color);">Premium Seats</h3>
+                <p style="color: #666;">Extra legroom and sofa-style reclining seats for maximum comfort.</p>
+            </div>
+        </div>
+
+        <!-- Mini Fleet Showcase -->
+        <div class="section-title">
+            <h2>Our Premium Fleet</h2>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+             <!-- VIP -->
+             <div class="bus-card" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08);">
+                <div style="height: 220px; overflow: hidden;">
+                    <img src="assets/images/vip_bus.png" alt="VIP Bus" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <div style="padding: 25px;">
+                    <h3 style="color: var(--secondary-color); margin-bottom: 10px;">VIP / Sofa Bus</h3>
+                    <p style="color: #666; font-size: 0.95rem;">2x1 Sofa Seating • Air Suspension</p>
+                </div>
+            </div>
+            <!-- Deluxe -->
+            <div class="bus-card" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08);">
+                <div style="height: 220px; overflow: hidden;">
+                    <img src="assets/images/deluxe_bus.png" alt="Deluxe Bus" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <div style="padding: 25px;">
+                    <h3 style="color: var(--secondary-color); margin-bottom: 10px;">Deluxe Bus</h3>
+                    <p style="color: #666; font-size: 0.95rem;">2x2 Mini Sofa • AC • Wifi</p>
+                </div>
+            </div>
+            <!-- Standard -->
+            <div class="bus-card" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08);">
+                <div style="height: 220px; overflow: hidden;">
+                    <img src="assets/images/bus.png" alt="Standard Bus" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <div style="padding: 25px;">
+                    <h3 style="color: var(--secondary-color); margin-bottom: 10px;">Standard Bus</h3>
+                    <p style="color: #666; font-size: 0.95rem;">2x2 Standard • Budget Friendly</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 <?php include 'includes/footer.php'; ?>

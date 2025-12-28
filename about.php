@@ -59,6 +59,100 @@
         </div>
     </div>
 
+    <!-- Bus Facilities and Types -->
+    <div style="margin-bottom: 80px;">
+        <div style="text-align: center; margin-bottom: 50px;">
+            <h4 style="color: var(--primary-color); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">Our Fleet</h4>
+            <h2 style="color: var(--secondary-color); margin-bottom: 15px;">Bus Types & Facilities</h2>
+            <p style="color: #666; max-width: 700px; margin: 0 auto;">
+                Several types of buses operate on the Pokhara-Kathmandu route, catering to tourists and providing enhanced comfort.
+            </p>
+        </div>
+
+        <div class="bus-types-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;">
+            <!-- VIP/Sofa Bus -->
+            <div class="bus-card" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08); transition: 0.3s;">
+                <div style="height: 250px; overflow: hidden;">
+                    <img src="assets/images/vip_bus.png" alt="VIP Sofa Bus" style="width: 100%; height: 100%; object-fit: cover; transition: 0.5s;">
+                </div>
+                <div style="padding: 30px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h3 style="color: var(--secondary-color); margin: 0;">VIP / Sofa Bus</h3>
+                        <span style="background: #e3f2fd; color: var(--primary-color); padding: 5px 12px; border-radius: 20px; font-size: 0.9rem; font-weight: 600;">Luxury</span>
+                    </div>
+                    <p style="color: #666; margin-bottom: 20px; line-height: 1.6;">
+                        The most comfortable option with 2x1 seating, wide electronic reclining seats, air suspension, and complimentary amenities.
+                    </p>
+                    <ul style="list-style: none; padding: 0; margin-bottom: 25px;">
+                        <li style="margin-bottom: 8px; color: #555;"><i class="fas fa-check-circle" style="color: var(--primary-color); margin-right: 10px;"></i>2x1 Sofa Seating</li>
+                        <li style="margin-bottom: 8px; color: #555;"><i class="fas fa-check-circle" style="color: var(--primary-color); margin-right: 10px;"></i>Air Suspension</li>
+                        <li style="margin-bottom: 8px; color: #555;"><i class="fas fa-check-circle" style="color: var(--primary-color); margin-right: 10px;"></i>Snacks & Water</li>
+                    </ul>
+                    <div style="border-top: 1px solid #eee; padding-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <span style="display: block; font-size: 0.85rem; color: #999;">Starting from</span>
+                            <span style="color: var(--secondary-color); font-weight: 700; font-size: 1.2rem;">NPR 1,600</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deluxe Bus -->
+            <div class="bus-card" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08); transition: 0.3s;">
+                <div style="height: 250px; overflow: hidden;">
+                    <img src="assets/images/deluxe_bus.png" alt="Deluxe Bus" style="width: 100%; height: 100%; object-fit: cover; transition: 0.5s;">
+                </div>
+                <div style="padding: 30px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h3 style="color: var(--secondary-color); margin: 0;">Deluxe Bus</h3>
+                        <span style="background: #fff3e0; color: #ff9800; padding: 5px 12px; border-radius: 20px; font-size: 0.9rem; font-weight: 600;">Popular</span>
+                    </div>
+                    <p style="color: #666; margin-bottom: 20px; line-height: 1.6;">
+                        Features 2x2 mini-sofa seating with AC and comfortable amenities. A perfect balance of comfort and affordability.
+                    </p>
+                    <ul style="list-style: none; padding: 0; margin-bottom: 25px;">
+                        <li style="margin-bottom: 8px; color: #555;"><i class="fas fa-check-circle" style="color: var(--primary-color); margin-right: 10px;"></i>2x2 Mini Sofa Seats</li>
+                        <li style="margin-bottom: 8px; color: #555;"><i class="fas fa-check-circle" style="color: var(--primary-color); margin-right: 10px;"></i>Air Conditioning</li>
+                        <li style="margin-bottom: 8px; color: #555;"><i class="fas fa-check-circle" style="color: var(--primary-color); margin-right: 10px;"></i>Bottled Water</li>
+                    </ul>
+                    <div style="border-top: 1px solid #eee; padding-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <span style="display: block; font-size: 0.85rem; color: #999;">Price Range</span>
+                            <span style="color: var(--secondary-color); font-weight: 700; font-size: 1.2rem;">NPR 1,200 - 1,500</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Standard Bus -->
+            <div class="bus-card" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08); transition: 0.3s;">
+                <div style="height: 250px; overflow: hidden;">
+                    <img src="assets/images/bus.png" alt="Standard Bus" style="width: 100%; height: 100%; object-fit: cover; transition: 0.5s;">
+                </div>
+                <div style="padding: 30px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h3 style="color: var(--secondary-color); margin: 0;">Standard Bus</h3>
+                        <span style="background: #e8eaf6; color: #3f51b5; padding: 5px 12px; border-radius: 20px; font-size: 0.9rem; font-weight: 600;">Budget</span>
+                    </div>
+                    <p style="color: #666; margin-bottom: 20px; line-height: 1.6;">
+                        A budget-conscious option with fewer amenities but high frequency. Ideal for quick and affordable travel.
+                    </p>
+                    <ul style="list-style: none; padding: 0; margin-bottom: 25px;">
+                        <li style="margin-bottom: 8px; color: #555;"><i class="fas fa-check-circle" style="color: var(--primary-color); margin-right: 10px;"></i>2x2 Standard Seats</li>
+                        <li style="margin-bottom: 8px; color: #555;"><i class="fas fa-check-circle" style="color: var(--primary-color); margin-right: 10px;"></i>Regular Stops</li>
+                        <li style="margin-bottom: 8px; color: #555;"><i class="fas fa-check-circle" style="color: var(--primary-color); margin-right: 10px;"></i>Most Frequent</li>
+                    </ul>
+                    <div style="border-top: 1px solid #eee; padding-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <span style="display: block; font-size: 0.85rem; color: #999;">Economical</span>
+                            <span style="color: var(--secondary-color); font-weight: 700; font-size: 1.2rem;">Best Value</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Stats -->
     <div class="stats-container" style="background: var(--secondary-color); padding: 50px; border-radius: 20px; color: white; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; text-align: center;">
         <div>

@@ -18,7 +18,7 @@ if ($_SESSION['role'] !== 'admin') {
                 <th>Contact</th>
                 <th>Bus</th>
                 <th>Route</th>
-                <th>Date</th>
+                <th>Date/Time</th>
                 <th>Seat</th>
                 <th>Pickup</th>
                 <th>Pay Status</th>
@@ -33,7 +33,7 @@ if ($_SESSION['role'] !== 'admin') {
                 echo "<tr><td colspan='11' style='background: #d4edda; color: #155724; padding: 10px; text-align: center;'>{$_GET['msg']}</td></tr>";
             }
 
-            $sql = "SELECT b.id, b.passenger_name, b.contact_number, b.pickup_location, v.bus_name, r.source, r.destination, r.departure_date, b.seat_number, b.payment_status, b.transaction_id, b.paid_amount 
+            $sql = "SELECT b.id, b.passenger_name, b.contact_number, b.pickup_location, v.bus_name, r.source, r.destination, r.departure_date, r.departure_time, b.seat_number, b.payment_status, b.transaction_id, b.paid_amount 
                     FROM bookings b 
                     JOIN routes r ON b.route_id = r.id
                     JOIN buses v ON r.bus_id = v.id 
@@ -52,7 +52,7 @@ if ($_SESSION['role'] !== 'admin') {
                         <td>{$row['contact_number']}</td>
                         <td>{$row['bus_name']}</td>
                         <td>{$row['source']} - {$row['destination']}</td>
-                        <td>{$row['departure_date']}</td>
+                        <td>{$row['departure_date']} <br> <small>" . date('h:i A', strtotime($row['departure_time'])) . "</small></td>
                         <td><span style='background: #eef; padding: 2px 6px; border-radius: 4px;'>{$row['seat_number']}</span></td>
                         <td>{$row['pickup_location']}</td>
 

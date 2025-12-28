@@ -57,36 +57,46 @@ if (isset($_POST['confirm_payment'])) {
         // Determine status
         $payment_status = ($paid_amount >= $total_price) ? 'paid' : 'partial';
 
-        // Insert bookings
+        // Pre-check Availability
+        $seats_available = true;
+        $taken_seats = [];
         foreach ($selected_seats as $seat) {
-            // Check if seat is already taken (Double check race condition)
-            $check_sql = "SELECT id FROM bookings WHERE route_id = '$route_id' AND seat_number = '$seat'";
+            $check_sql = "SELECT id FROM bookings WHERE route_id = '$route_id' AND seat_number = '$seat' AND payment_status != 'cancelled'";
             $check_result = $conn->query($check_sql);
-            
-            if ($check_result->num_rows == 0) {
+            if ($check_result->num_rows > 0) {
+                $seats_available = false;
+                $taken_seats[] = $seat;
+            }
+        }
+
+        if (!$seats_available) {
+            $error = "Error: Some seats (" . implode(", ", $taken_seats) . ") were just booked by another user. Please select different seats.";
+        } else {
+            // Insert bookings
+            foreach ($selected_seats as $seat) {
                  $sql = "INSERT INTO bookings (user_id, route_id, seat_number, payment_status, payment_method, transaction_id, paid_amount, passenger_name, contact_number, pickup_location) 
                         VALUES ('$user_id', '$route_id', '$seat', '$payment_status', '$payment_method', '$transaction_id', '$paid_amount', '$passenger_name', '$contact_number', '$pickup_location')";
                 $conn->query($sql);
             }
+            
+            $success = "Booking Successful! Status: " . ucfirst($payment_status);
+            // Prepare ticket data for JS
+            $ticket_data = [
+                'name' => $passenger_name,
+                'contact' => $contact_number,
+                'pickup' => $pickup_location,
+                'bus' => $route['bus_name'] . ' (' . $route['bus_number'] . ')',
+                'route' => $route['source'] . ' - ' . $route['destination'],
+                'date' => $route['departure_date'] . ' ' . date('h:i A', strtotime($route['departure_time'])),
+                'seats' => implode(", ", $selected_seats),
+                'total' => $total_price,
+                'paid' => $paid_amount,
+                'transaction_id' => $transaction_id
+            ];
+            
+            // Clear post data to prevent resubmission
+            $_POST = array();
         }
-        
-        $success = "Booking Successful! Status: " . ucfirst($payment_status);
-        // Prepare ticket data for JS
-        $ticket_data = [
-            'name' => $passenger_name,
-            'contact' => $contact_number,
-            'pickup' => $pickup_location,
-            'bus' => $route['bus_name'] . ' (' . $route['bus_number'] . ')',
-            'route' => $route['source'] . ' - ' . $route['destination'],
-            'date' => $route['departure_date'] . ' ' . $route['departure_time'],
-            'seats' => implode(", ", $selected_seats),
-            'total' => $total_price,
-            'paid' => $paid_amount,
-            'transaction_id' => $transaction_id
-        ];
-        
-        // Clear post data to prevent resubmission
-        $_POST = array();
     }
 }
 ?>
@@ -187,7 +197,7 @@ if (isset($_POST['confirm_payment'])) {
             <hr>
             <p><strong>Route:</strong> <?php echo $route['source'] . ' - ' . $route['destination']; ?></p>
             <p><strong>Bus:</strong> <?php echo $route['bus_name']; ?> (<?php echo $route['bus_number']; ?>)</p>
-            <p><strong>Date:</strong> <?php echo $route['departure_date'] . ' ' . $route['departure_time']; ?></p>
+            <p><strong>Date:</strong> <?php echo $route['departure_date'] . ' ' . date('h:i A', strtotime($route['departure_time'])); ?></p>
             <p><strong>Selected Seats:</strong> <?php echo implode(", ", $selected_seats); ?></p>
             <hr>
             <p><strong>Passenger:</strong> <?php echo htmlspecialchars($passenger_name); ?></p>

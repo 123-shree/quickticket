@@ -17,6 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['user_id'] = $row['id'];
             $_SESSION['user_name'] = $row['name'];
             $_SESSION['role'] = $row['role'];
+            $_SESSION['flash_msg'] = "Login successful! Welcome back, " . $row['name'];
             
             if ($row['role'] == 'admin' || $row['role'] == 'agent') {
                 header("Location: admin/index.php");

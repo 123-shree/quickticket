@@ -18,10 +18,10 @@ $user_id = $_SESSION['user_id'];
 
 <div class="container section-padding">
     <?php
-    $sql = "SELECT b.id, v.bus_name, v.bus_number, r.source, r.destination, r.departure_date, r.departure_time, b.seat_number, b.payment_status, b.transaction_id, b.paid_amount 
+    $sql = "SELECT b.id, v.bus_name, v.bus_number, v.bus_type, r.source, r.destination, r.departure_date, r.departure_time, b.seat_number, b.payment_status, b.transaction_id, b.paid_amount, r.price 
             FROM bookings b 
-            JOIN routes r ON b.route_id = r.id
-            JOIN buses v ON r.bus_id = v.id 
+            LEFT JOIN routes r ON b.route_id = r.id
+            LEFT JOIN buses v ON r.bus_id = v.id 
             WHERE b.user_id = $user_id 
             ORDER BY b.id DESC";
     
@@ -41,18 +41,32 @@ $user_id = $_SESSION['user_id'];
             } elseif ($row['payment_status'] == 'partial') {
                 $status_color = '#f1c40f'; // Yellow
                 $status_text = 'Partial Paid';
+            } elseif ($row['payment_status'] == 'cancelled') {
+                $status_color = '#95a5a6'; // Gray
+                $status_text = 'Cancelled';
+                $verification_icon = '<i class="fas fa-ban"></i>';
             } else {
                 $status_color = '#e74c3c'; // Red
                 $status_text = 'Payment Due'; 
             }
             
-            // Randomize bus image for variety or use fixed
-            $bus_image = 'assets/images/bus.png'; 
+            // Dynamic Bus Image Logic
+            $bus_image = 'assets/images/bus.png'; // Default
+            $bus_type_lower = strtolower($row['bus_type']);
+            
+            if (strpos($bus_type_lower, 'vip') !== false || strpos($bus_type_lower, 'sofa') !== false) {
+                $bus_image = 'assets/images/vip_bus.png';
+            } elseif (strpos($bus_type_lower, 'deluxe') !== false) {
+                $bus_image = 'assets/images/deluxe_bus.png';
+            }
+            
+            // Should verify if file exists, but for now we trust the assets folder
+             
             
             ?>
-            <div class="ticket-card-wrap">
+            <div class="ticket-card-wrap" style="opacity: <?php echo $status_text == 'Cancelled' ? '0.7' : '1'; ?>;">
                 <div class="ticket-image" style="height: 180px; overflow: hidden; position: relative;">
-                    <img src="<?php echo $bus_image; ?>" style="width: 100%; height: 100%; object-fit: cover;">
+                    <img src="<?php echo $bus_image; ?>" style="width: 100%; height: 100%; object-fit: cover; filter: <?php echo $status_text == 'Cancelled' ? 'grayscale(100%)' : 'none'; ?>;">
                     <div style="position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.7); color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; backdrop-filter: blur(4px);">
                         <?php echo $verification_icon . ' ' . $status_text; ?>
                     </div>
@@ -75,22 +89,35 @@ $user_id = $_SESSION['user_id'];
                         </div>
                         <div class="detail-row">
                             <span class="label"><i class="far fa-clock"></i> Time</span>
-                            <span class="value"><?php echo $row['departure_time']; ?></span>
+                            <span class="value"><?php echo date('h:i A', strtotime($row['departure_time'])); ?></span>
                         </div>
                         <div class="detail-row">
                             <span class="label"><i class="fas fa-chair"></i> Seat</span>
                             <span class="value highlight-seat"><?php echo $row['seat_number']; ?></span>
                         </div>
                          <div class="detail-row">
-                            <span class="label"><i class="fas fa-bus"></i> Bus</span>
+                            <span class="label"><i class="fas fa-bus"></i> Bus Details</span>
                             <span class="value"><?php echo $row['bus_name']; ?></span>
+                            <span style="font-size: 0.8rem; color: var(--primary-color); font-weight: bold;"><?php echo $row['bus_type']; ?></span>
                         </div>
                     </div>
                 </div>
                 
                 <div class="ticket-footer">
-                    <span class="price-tag">Rs. <?php echo $row['paid_amount']; ?></span>
-                    <button class="btn-view" onclick="alert('Please go to Payment page or contact admin for ticket PDF.')"><i class="fas fa-download"></i> Ticket</button>
+                    <span class="price-tag" style="color: var(--primary-color); font-weight: bold;">Rs. <?php echo $row['price']; ?></span>
+                    
+                    <div style="display: flex; gap: 10px;">
+                        <?php if($status_text != 'Cancelled'): ?>
+                            <a href="print_ticket.php?id=<?php echo $row['id']; ?>" class="btn-view" style="text-decoration: none; color: inherit; font-size: 0.8rem; padding: 6px 12px; border: 1px solid #ccc; border-radius: 20px;">
+                                <i class="fas fa-print"></i> Print
+                            </a>
+                            <a href="cancel_booking.php?id=<?php echo $row['id']; ?>" onclick="return confirm('Are you sure you want to cancel this ticket?')" class="btn-view" style="text-decoration: none; color: red; border-color: red; font-size: 0.8rem; padding: 6px 12px; border-radius: 20px;">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                        <?php else: ?>
+                            <span style="color: #999; font-size: 0.9rem;">No actions</span>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
             <?php

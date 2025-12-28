@@ -14,20 +14,56 @@ $date = isset($_GET['date']) ? $_GET['date'] : '';
     </div>
 </div>
 
+
 <div class="container section-padding">
+    <!-- Filters -->
+    <div class="filters">
+        <span style="font-weight: bold; color: #555;"><i class="fas fa-filter"></i> Filter:</span>
+        <form action="" method="GET">
+            <input type="hidden" name="from" value="<?php echo htmlspecialchars($from); ?>">
+            <input type="hidden" name="to" value="<?php echo htmlspecialchars($to); ?>">
+            <input type="hidden" name="date" value="<?php echo htmlspecialchars($date); ?>">
+            
+            <select name="type" style="padding: 8px; border: 1px solid #ced4da; border-radius: 4px;">
+                <option value="">All Bus Types</option>
+                <option value="Deluxe" <?php if(isset($_GET['type']) && $_GET['type'] == 'Deluxe') echo 'selected'; ?>>Deluxe</option>
+                <option value="Standard" <?php if(isset($_GET['type']) && $_GET['type'] == 'Standard') echo 'selected'; ?>>Standard</option>
+                <option value="VIP" <?php if(isset($_GET['type']) && $_GET['type'] == 'VIP') echo 'selected'; ?>>VIP / Sofa</option>
+            </select>
+            
+            <input type="number" name="max_price" placeholder="Max Price" value="<?php echo isset($_GET['max_price']) ? htmlspecialchars($_GET['max_price']) : ''; ?>" style="padding: 8px; border: 1px solid #ced4da; border-radius: 4px; width: 100px;">
+            
+            <button type="submit" class="btn btn-primary" style="padding: 8px 15px; font-size: 0.9rem;">Apply</button>
+            <?php if(isset($_GET['type']) || isset($_GET['max_price'])): ?>
+                <a href="search.php?from=<?php echo urlencode($from); ?>&to=<?php echo urlencode($to); ?>&date=<?php echo urlencode($date); ?>" style="color: red; text-decoration: none; font-size: 0.9rem;">Clear</a>
+            <?php endif; ?>
+        </form>
+    </div>
+
     <div class="search-results">
         <?php
         if ($from && $to && $date) {
+            $filter_type = isset($_GET['type']) ? $_GET['type'] : '';
+            $filter_price = isset($_GET['max_price']) ? $_GET['max_price'] : '';
+
             $sql = "SELECT r.*, b.bus_name, b.bus_type, b.total_seats 
                     FROM routes r 
                     JOIN buses b ON r.bus_id = b.id 
                     WHERE r.source LIKE '%$from%' AND r.destination LIKE '%$to%' AND r.departure_date = '$date'";
+            
+            if (!empty($filter_type)) {
+                $sql .= " AND b.bus_type LIKE '%$filter_type%'";
+            }
+            if (!empty($filter_price)) {
+                $sql .= " AND r.price <= $filter_price";
+            }
+
             $result = $conn->query($sql);
 
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
                     ?>
-                    <div class="bus-card" style="background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+                    <div class="bus-card">
                         <div class="bus-info">
                             <h3 style="color: var(--secondary-color); margin-bottom: 5px;"><?php echo $row['bus_name']; ?></h3>
                             <span class="badge" style="background: #e1f5fe; color: #0288d1; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;"><?php echo $row['bus_type']; ?></span>
