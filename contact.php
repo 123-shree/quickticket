@@ -74,9 +74,28 @@ if (isset($_POST['submit_contact'])) {
             </div>
 
             <!-- Map Placeholder -->
-            <div class="map-container" style="border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); height: 250px;">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d113032.64621419792!2d87.1009!3d26.6!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39ef744704331cc5%3A0x6d9a8c7c06c5c8e2!2sInaruwa%2C%20Nepal!5e0!3m2!1sen!2snp!4v1625000000000!5m2!1sen!2snp" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            <!-- Map Placeholder with Overlay -->
+            <div class="map-container" style="border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); height: 250px; position: relative;">
+                <a href="https://www.google.com/maps/place/Inaruwa,+Nepal" target="_blank" style="display: block; width: 100%; height: 100%; text-decoration: none;">
+                    <img src="assets/images/inaruwa_offline_map.png" alt="Offline Map: Inaruwa, Sunsari (Downloadable)" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;" class="map-image" loading="lazy">
+                    <div class="map-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease;">
+                        <span style="background: white; padding: 10px 20px; border-radius: 30px; color: var(--primary-color); font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.2); transform: translateY(10px); transition: transform 0.3s ease;">
+                            <i class="fas fa-external-link-alt"></i> View on Google Maps
+                        </span>
+                    </div>
+                </a>
             </div>
+            <style>
+                .map-container:hover .map-overlay { opacity: 1; }
+                .map-container:hover .map-overlay span { transform: translateY(0); }
+                .map-container:hover .map-image { transform: scale(1.05); }
+                .map-container { background: #eee; animation: skeleton-loading 1.5s infinite linear; }
+                @keyframes skeleton-loading {
+                    0% { background-color: #eee; }
+                    50% { background-color: #f5f5f5; }
+                    100% { background-color: #eee; }
+                }
+            </style>
         </div>
         
         <!-- Contact Form -->
