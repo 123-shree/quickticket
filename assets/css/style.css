@@ -91,11 +91,27 @@ ul {
 }
 
 .section-title h2 {
-    font-size: 2rem;
+    font-size: 2.5rem;
     color: var(--secondary-color);
     text-align: left;
-    border-left: 5px solid var(--primary-color);
-    padding-left: 20px;
+    border-left: 6px solid var(--primary-color);
+    padding-left: 25px;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.section-slogan {
+    font-size: 1.2rem;
+    color: #666;
+    margin-top: 10px;
+    padding-left: 30px;
+    /* Aligns with border + padding of h2 */
+    font-weight: 500;
+    max-width: 600px;
+    background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 0.5px;
 }
 
 /* --- Navbar --- */
@@ -287,72 +303,105 @@ ul {
 
 .promo-card {
     position: relative;
-    border-radius: 16px;
+    border-radius: 20px;
     overflow: hidden;
-    height: 200px;
+    height: 240px;
     display: flex;
-    align-items: center;
-    padding: 25px;
-    box-shadow: var(--shadow);
-    transition: var(--transition);
+    flex-direction: column;
+    justify-content: center;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     color: var(--white);
+    z-index: 1;
 }
 
 .promo-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
 }
 
-/* Gradient Variants */
+.promo-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.1) 100%);
+    z-index: -1;
+}
+
+/* Gradient Variants - More Vibrant */
 .promo-1 {
-    background: linear-gradient(45deg, #FF9A9E 0%, #FECFEF 99%);
+    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%);
+    background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+    /* Sunrise */
 }
 
 .promo-2 {
-    background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    /* Ocean Blue */
 }
 
 .promo-3 {
-    background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    /* Mint */
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    /* Deep Green */
 }
 
 .promo-content {
     z-index: 2;
+    position: relative;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .promo-tag {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(5px);
-    padding: 5px 12px;
-    border-radius: 30px;
-    font-size: 0.75rem;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 0.8rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 1.2px;
     display: inline-block;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 .promo-card h3 {
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     font-weight: 800;
-    margin-bottom: 5px;
-    line-height: 1.1;
+    margin-bottom: 10px;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
 }
 
 .promo-card p {
-    font-size: 0.95rem;
+    font-size: 1.05rem;
     opacity: 0.95;
     font-weight: 500;
+    max-width: 85%;
+    line-height: 1.5;
 }
 
 .promo-icon {
     position: absolute;
     right: -20px;
-    bottom: -20px;
-    font-size: 9rem;
+    bottom: -30px;
+    font-size: 10rem;
     opacity: 0.15;
     transform: rotate(-15deg);
+    transition: all 0.4s ease;
+}
+
+.promo-card:hover .promo-icon {
+    transform: rotate(0deg) scale(1.1);
+    opacity: 0.2;
 }
 
 /* --- Popular Routes --- */
@@ -757,135 +806,9 @@ ul {
     margin: 0 auto 10px;
 }
 
-/* CSS Grid for Bus Layout */
-.seats-grid {
-    display: grid;
-    gap: 20px 15px;
-    /* Row gap, Col gap */
-    max-width: 450px;
-    margin: 0 auto;
-    padding: 20px;
-    background: #fdfdfd;
-    border-radius: 10px;
-}
-
-/* 2+2 Layout (Standard) */
-.seats-grid.layout-2-2 {
-    grid-template-columns: repeat(5, 1fr);
-    /* Seat, Seat, Gap, Seat, Seat */
-}
-
-.seats-grid.layout-2-2 .seat-wrapper:nth-child(4n+3) {
-    grid-column-start: 4;
-    /* Skip 3rd column */
-}
-
-/* 2+1 Layout (VIP/Tourist) */
-.seats-grid.layout-2-1 {
-    grid-template-columns: repeat(4, 1fr);
-    /* Seat, Seat, Gap, Seat */
-    max-width: 380px;
-    /* Slightly narrower */
-}
-
-.seats-grid.layout-2-1 .seat-wrapper:nth-child(3n+3) {
-    grid-column-start: 4;
-    /* Skip 3rd column */
-}
-
-/* Realistic Seat Styling */
-.seat-wrapper {
-    position: relative;
-    width: 100%;
-    padding-top: 100%;
-    /* Aspect Ratio */
-    cursor: pointer;
-}
-
-.seat-wrapper input {
-    display: none;
-}
-
-.seat-shape {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: #f5f5f5;
-    border: 1px solid #ddd;
-    border-radius: 8px 8px 12px 12px;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.seat-headrest {
-    position: absolute;
-    top: -8px;
-    left: 10%;
-    width: 80%;
-    height: 12px;
-    background: inherit;
-    border: 1px solid inherit;
-    border-bottom: none;
-    border-radius: 6px 6px 4px 4px;
-    z-index: 1;
-}
-
-.seat-armrest {
-    position: absolute;
-    bottom: 10%;
-    width: 4px;
-    height: 40%;
-    background: #ddd;
-    border-radius: 2px;
-}
-
-.seat-armrest.left {
-    left: 4px;
-}
-
-.seat-armrest.right {
-    right: 4px;
-}
-
-.seat-wrapper:hover .seat-shape {
-    border-color: #aaa;
-    transform: translateY(-2px);
-}
-
-/* Selected State */
-.seat-wrapper input:checked+.seat-shape {
-    background: #4caf50;
-    border-color: #388e3c;
-    color: white;
-    box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
-}
-
-.seat-wrapper input:checked+.seat-shape .seat-armrest {
-    background: #81c784;
-}
-
-/* Booked State */
-.seat-shape.booked {
-    background: #ffcdd2;
-    /* Reddish for booked */
-    border-color: #ef9a9a;
-    cursor: not-allowed;
-    color: #b71c1c;
-}
-
-.seat-wrapper:has(.booked) {
-    cursor: not-allowed;
-}
-
-.seat-number {
-    font-weight: bold;
-    z-index: 2;
-}
+/* Seat Layout Styles have been moved to book.php for better flexibility */
+/* Using specific class .seat-wrapper in book.php overrides these if needed, 
+   but it is safer to remove global conflicts. */
 
 @media (max-width: 768px) {
     .booking-container {

@@ -127,7 +127,7 @@
             <!-- Standard Bus -->
             <div class="bus-card" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08); transition: 0.3s;">
                 <div style="height: 250px; overflow: hidden;">
-                    <img src="assets/images/bus.png" alt="Standard Bus" style="width: 100%; height: 100%; object-fit: cover; transition: 0.5s;">
+                    <img src="assets/images/local box.jpg" alt="Standard Bus" style="width: 100%; height: 100%; object-fit: cover; transition: 0.5s;">
                 </div>
                 <div style="padding: 30px;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">

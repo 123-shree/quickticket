@@ -74,10 +74,18 @@ if (isset($_POST['confirm_payment'])) {
         } else {
             // Insert bookings
             foreach ($selected_seats as $seat) {
-                 $sql = "INSERT INTO bookings (user_id, route_id, seat_number, payment_status, payment_method, transaction_id, paid_amount, passenger_name, contact_number, pickup_location) 
+             $sql = "INSERT INTO bookings (user_id, route_id, seat_number, payment_status, payment_method, transaction_id, paid_amount, passenger_name, contact_number, pickup_location) 
                         VALUES ('$user_id', '$route_id', '$seat', '$payment_status', '$payment_method', '$transaction_id', '$paid_amount', '$passenger_name', '$contact_number', '$pickup_location')";
                 $conn->query($sql);
             }
+            
+            // --- Notification Logic ---
+            $msg_user = "Booking Confirmed! Route: " . $route['source'] . " to " . $route['destination'] . " | Seats: " . implode(", ", $selected_seats);
+            $conn->query("INSERT INTO notifications (user_id, type, message) VALUES ('$user_id', 'success', '$msg_user')");
+            
+            $msg_admin = "New Booking Alert! User ID: $user_id booked " . count($selected_seats) . " seat(s) on Route ID: $route_id. Trans ID: $transaction_id";
+            $conn->query("INSERT INTO notifications (user_id, type, message) VALUES (NULL, 'info', '$msg_admin')"); // NULL user_id for Admin
+            // --------------------------
             
             $success = "Booking Successful! Status: " . ucfirst($payment_status);
             // Prepare ticket data for JS

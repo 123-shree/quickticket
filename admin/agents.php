@@ -93,6 +93,7 @@ if (isset($_GET['delete'])) {
                         <td>{$row['email']}</td>
                         <td>{$row['created_at']}</td>
                         <td>
+                            <a href='edit_agent.php?id={$row['id']}' style='color: blue; margin-right: 10px;'>Edit</a>
                             <a href='agents.php?delete={$row['id']}' style='color: red;' onclick='return confirm(\"Are you sure you want to delete this agent?\")'>Delete</a>
                         </td>
                     </tr>";

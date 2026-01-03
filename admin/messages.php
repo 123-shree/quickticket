@@ -7,6 +7,13 @@ if ($_SESSION['role'] !== 'admin') {
 
 include '../includes/db.php';
 
+// Handle Delete
+if (isset($_GET['delete'])) {
+    $id = $_GET['delete'];
+    $conn->query("DELETE FROM messages WHERE id=$id");
+    header("Location: messages.php");
+}
+
 // Fetch messages
 $sql = "SELECT * FROM messages ORDER BY created_at DESC";
 $result = $conn->query($sql);
@@ -27,6 +34,7 @@ $result = $conn->query($sql);
                     <th>Phone</th>
                     <th>Message</th>
                     <th>Date</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -39,6 +47,9 @@ $result = $conn->query($sql);
                             <td><?php echo htmlspecialchars($row['phone']); ?></td>
                             <td><?php echo nl2br(htmlspecialchars($row['message'])); ?></td>
                             <td><?php echo date('M d, Y h:i A', strtotime($row['created_at'])); ?></td>
+                            <td>
+                                <a href="messages.php?delete=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this message?')" style="color: red;"><i class="fas fa-trash"></i></a>
+                            </td>
                         </tr>
                     <?php endwhile; ?>
                 <?php else: ?>

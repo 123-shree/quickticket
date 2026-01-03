@@ -72,6 +72,7 @@ if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['admin', 'agen
                     </div>
                 </a>
                 <a href="popular_routes.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'popular_routes.php' ? 'active' : ''; ?>"><i class="fas fa-map-marked-alt"></i> Popular Routes</a>
+                <a href="fleet.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'fleet.php' ? 'active' : ''; ?>"><i class="fas fa-bus-alt"></i> Premium Fleet</a>
                 <a href="agents.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'agents.php' ? 'active' : ''; ?>">
                      <div style="display: flex; align-items: center; width: 100%;">
                         <i class="fas fa-user-tie"></i> <span style="margin-left: 12px;">Agents</span>

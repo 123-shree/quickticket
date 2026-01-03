@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <div class="page-header">
     <div class="container">
         <h1>Select Seats</h1>
-        <p><?php echo $route['bus_name']; ?> (<?php echo $route['bus_number']; ?>)</p>
+        <p><?php echo $route['bus_name']; ?> - <?php echo $route['bus_type']; ?> (<?php echo $route['bus_number']; ?>)</p>
     </div>
 </div>
 
@@ -93,30 +93,251 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
                 ?>
 
-                <div class="seats-grid <?php echo $layout_class; ?>">
+                <div class="seats-bus-container">
                     <?php
-                    $total_seats = $route['total_seats'];
+                    // --- NEPAL / INDIA REGIONAL SEAT LAYOUT ---
+                    // Layout: 
+                    // Side A (Right/Driver Side) - Usually 2 seats [A(Row)1, A(Row)2] or just A1, A2, A3... logic
+                    // Side B (Left/Door Side) - Usually 2 seats [B(Row)1, B(Row)2]
                     
-                    for ($i = 1; $i <= $total_seats; $i++) {
-                        $is_booked = in_array($i, $booked_seats);
-                        $disabled = $is_booked ? 'disabled' : '';
+                    // We will use "A" for Right Side (Driver) and "B" for Left Side (Door Side)
+                    // Rows 1, 2, 3...
+                    // Seat Names: A1, A2 (Row 1 Side A) | B1, B2 (Row 1 Side B)
+                    // Note: Most local buses use A side as Driver Side.
+                    
+                    $total_seats = $route['total_seats'];
+                    $bus_type = strtolower($route['bus_type']);
+                    
+                    // Configuration
+                    $columns_side_A = 2; // Right Side (Driver)
+                    $columns_side_B = 2; // Left Side
+                    $seat_type_class = 'type-standard';
+
+                    if (strpos($bus_type, 'vip') !== false || strpos($bus_type, 'sofa') !== false) {
+                        $columns_side_A = 2; // Right Side (Double)
+                        $columns_side_B = 1; // Left Side (Single)
+                        $seat_type_class = 'type-sofa';
+                    } elseif (strpos($bus_type, 'deluxe') !== false) {
+                        $seat_type_class = 'type-deluxe';
+                    }
+                    
+                    $seats_per_row = $columns_side_A + $columns_side_B;
+                    $total_rows = ceil($total_seats / $seats_per_row);
+                    
+                    // Generate Rows
+                    for($row = 1; $row <= $total_rows; $row++) {
+                        echo "<div class='bus-row'>";
                         
-                        // Seat Numbering & Labeling Logic could be enhanced here
-                        // For now, straight numbering
-                        
-                        echo "<label class='seat-wrapper'>";
-                        echo "<input type='checkbox' name='seats[]' value='$i' $disabled>";
-                        echo "<div class='seat-shape " . ($is_booked ? 'booked' : '') . "'>";
-                        echo "<span class='seat-number'>$i</span>";
-                        // Added realistic styling elements
-                        echo "<div class='seat-headrest'></div>";
-                        echo "<div class='seat-armrest left'></div>";
-                        echo "<div class='seat-armrest right'></div>";
+                        // --- SIDE B (Left / Door Side) --- 
+                        echo "<div class='seat-group side-b'>";
+                        for($col = 1; $col <= $columns_side_B; $col++) {
+                            $seat_num_B = ($row - 1) * $columns_side_B + $col;
+                            $seat_label = "B" . $seat_num_B;
+                             
+                            $is_booked = in_array($seat_label, $booked_seats);
+                            $disabled = $is_booked ? 'disabled' : '';
+                            
+                            echo "<label class='seat-wrapper " . ($seat_type_class == 'type-sofa' ? 'is-sofa' : '') . "'>";
+                            echo "<input type='checkbox' name='seats[]' value='$seat_label' $disabled>";
+                            echo "<div class='seat-shape $seat_type_class " . ($is_booked ? 'booked' : '') . "'>";
+                            echo "<span class='seat-number'>$seat_label</span>";
+                            if($seat_type_class == 'type-sofa') echo "<div class='seat-inner-cushion'></div>";
+                            echo "</div>";
+                            echo "</label>";
+                        }
                         echo "</div>";
-                        echo "</label>";
+                        
+                        // --- AISLE ---
+                        echo "<div class='aisle-gap'></div>";
+                        
+                        // --- SIDE A (Right / Driver Side) ---
+                        echo "<div class='seat-group side-a'>";
+                        for($col = 1; $col <= $columns_side_A; $col++) {
+                            $seat_num_A = ($row - 1) * $columns_side_A + $col;
+                            $seat_label = "A" . $seat_num_A;
+                            
+                            $is_booked = in_array($seat_label, $booked_seats);
+                            $disabled = $is_booked ? 'disabled' : '';
+                            
+                            echo "<label class='seat-wrapper " . ($seat_type_class == 'type-sofa' ? 'is-sofa' : '') . "'>";
+                            echo "<input type='checkbox' name='seats[]' value='$seat_label' $disabled>";
+                            echo "<div class='seat-shape $seat_type_class " . ($is_booked ? 'booked' : '') . "'>";
+                            echo "<span class='seat-number'>$seat_label</span>";
+                            if($seat_type_class == 'type-sofa') echo "<div class='seat-inner-cushion'></div>";
+                            echo "</div>";
+                            echo "</label>";
+                        }
+                        echo "</div>";
+                        
+                        echo "</div>"; // End Bus Row
                     }
                     ?>
                 </div>
+
+                <style>
+                    /* Custom Bus Layout CSS */
+                    .seats-bus-container {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 25px;
+                        padding: 40px;
+                        background: #fff;
+                        border: 2px solid #e0e0e0;
+                        border-radius: 20px;
+                        width: fit-content;
+                        margin: 0 auto;
+                        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+                        position: relative;
+                    }
+                    /* Driver Cabin Indicator */
+                    .seats-bus-container::before {
+                        content: '';
+                        position: absolute;
+                        top: -15px;
+                        right: 40px;
+                        width: 60px;
+                        height: 60px;
+                        background: url('assets/images/steering-wheel.png') no-repeat center/contain; 
+                        /* Fallback if image missing: border radius circle */
+                        border: 4px solid #333;
+                        border-radius: 50%;
+                        opacity: 0.8;
+                    }
+                    
+                    .bus-row {
+                        display: flex;
+                        justify-content: space-between;
+                        gap: 50px; /* Wide Aisle */
+                        align-items: center;
+                    }
+                    .seat-group {
+                        display: flex;
+                        gap: 15px; 
+                    }
+                    
+                    .seat-wrapper {
+                        display: block;
+                        position: relative;
+                        width: 55px; /* Base Size */
+                        height: 55px;
+                    }
+                    .seat-wrapper input { display: none; }
+                    
+                    /* --- BASE SEAT SHAPE --- */
+                    .seat-shape {
+                        width: 100%;
+                        height: 100%;
+                        background: #f5f5f5;
+                        border: 1px solid #ccc;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        cursor: pointer;
+                        font-weight: bold;
+                        color: #666;
+                        transition: all 0.3s ease;
+                        position: relative;
+                        z-index: 1;
+                        font-size: 0.85rem;
+                        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+                    }
+                    
+                    /* --- TYPE: STANDARD (Basic Boxy) --- */
+                    .seat-shape.type-standard {
+                        border-radius: 6px;
+                    }
+                    .seat-shape.type-standard::before {
+                        content: ''; /* Minimal detail */
+                        position: absolute;
+                        bottom: 0;
+                        width: 100%;
+                        height: 5px;
+                        background: #e0e0e0;
+                    }
+
+                    /* --- TYPE: DELUXE (Rounded, Headrest) --- */
+                    .seat-shape.type-deluxe {
+                        border-radius: 12px 12px 8px 8px; /* Rounded top */
+                        background: #fff;
+                        border-color: #bbb;
+                    }
+                    .seat-shape.type-deluxe::after {
+                         /* Headrest */
+                         content: '';
+                         position: absolute;
+                         top: -6px;
+                         left: 10%;
+                         width: 80%;
+                         height: 10px;
+                         background: #ddd;
+                         border-radius: 4px;
+                         border: 1px solid #ccc;
+                    }
+                    
+                    /* --- TYPE: SOFA (Plush, Wide, Armrests) --- */
+                    .seat-shape.type-sofa {
+                        border-radius: 15px 15px 10px 10px;
+                        background: linear-gradient(to bottom, #fff, #f9f9f9);
+                        border: 1px solid #aaa;
+                        box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+                    }
+                    /* Sofa Armrests */
+                    .seat-shape.type-sofa::before {
+                        content: '';
+                        position: absolute;
+                        left: -4px;
+                        bottom: 10%;
+                        width: 4px;
+                        height: 60%;
+                        background: #bbb;
+                        border-radius: 4px;
+                    }
+                    .seat-shape.type-sofa::after {
+                        content: '';
+                        position: absolute;
+                        right: -4px;
+                        bottom: 10%;
+                        width: 4px;
+                        height: 60%;
+                        background: #bbb;
+                        border-radius: 4px;
+                    }
+                    /* Sofa Head cushion effect */
+                    .seat-wrapper.is-sofa .seat-inner-cushion {
+                        position: absolute;
+                        top: 5px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        width: 70%;
+                        height: 30%;
+                        background: rgba(0,0,0,0.05);
+                        border-radius: 4px;
+                    }
+
+                    /* STATES */
+                    .seat-wrapper input:checked + .seat-shape {
+                        background: var(--primary-color);
+                        color: white !important;
+                        border-color: var(--primary-dark);
+                        box-shadow: 0 5px 15px rgba(106, 236, 225, 0.4);
+                        transform: translateY(-2px);
+                    }
+                    .seat-wrapper input:checked + .seat-shape::after,
+                    .seat-wrapper input:checked + .seat-shape::before {
+                        background-color: rgba(255,255,255,0.3); /* Tint accents */
+                        border-color: transparent;
+                    }
+                    
+                    .seat-shape.booked {
+                        background: #ffebee;
+                        color: #c62828;
+                        border-color: #ffcdd2;
+                        cursor: not-allowed;
+                        opacity: 0.8;
+                    }
+                    .seat-shape.booked::after { background-color: #ffcdd2; }
+                    
+                </style>
 
                 <div class="legend" style="display: flex; gap: 20px; justify-content: center; margin-top: 30px; font-size: 0.9rem;">
                     <div style="display: flex; align-items: center; gap: 8px;"><div style="width: 20px; height: 20px; background: #e0e0e0; border: 1px solid #ccc; border-radius: 4px;"></div> Available</div>
@@ -150,6 +371,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <ul style="margin-top: 20px; list-style: none;">
                 <li style="margin-bottom: 15px; display: flex; align-items: center;"><i class="fas fa-map-marker-alt" style="width: 30px; color: #666;"></i> <div><small style="color: #888">From</small><br><strong><?php echo $route['source']; ?></strong></div></li>
                 <li style="margin-bottom: 15px; display: flex; align-items: center;"><i class="fas fa-location-arrow" style="width: 30px; color: #666;"></i> <div><small style="color: #888">To</small><br><strong><?php echo $route['destination']; ?></strong></div></li>
+                <li style="margin-bottom: 15px; display: flex; align-items: center;"><i class="fas fa-bus" style="width: 30px; color: #666;"></i> <div><small style="color: #888">Bus Type</small><br><strong style="color: var(--primary-color); text-transform: uppercase;"><?php echo $route['bus_type']; ?></strong></div></li>
                 <li style="margin-bottom: 15px; display: flex; align-items: center;"><i class="fas fa-calendar" style="width: 30px; color: #666;"></i> <div><small style="color: #888">Date</small><br><strong><?php echo $route['departure_date']; ?></strong></div></li>
                 <li style="margin-bottom: 15px; display: flex; align-items: center;"><i class="fas fa-clock" style="width: 30px; color: #666;"></i> <div><small style="color: #888">Time</small><br><strong><?php echo date('h:i A', strtotime($route['departure_time'])); ?></strong></div></li>
                 <li style="margin-top: 25px; padding-top: 15px; border-top: 1px dashed #ddd; font-size: 1.3rem; color: var(--primary-color);"><strong>Rs. <?php echo $route['price']; ?></strong> <small style="font-size: 0.9rem; color: #666;">/ seat</small></li>

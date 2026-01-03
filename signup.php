@@ -25,11 +25,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $sql = "INSERT INTO users (name, email, password) VALUES ('$name', '$email', '$hashed_password')";
             
             if ($conn->query($sql) === TRUE) {
-                $redirect_param = isset($_GET['redirect']) ? "?redirect=" . urlencode($_GET['redirect']) : "";
+                $redirect_param = isset($_GET['redirect']) ? "&redirect=" . urlencode($_GET['redirect']) : "";
                 if (isset($_POST['redirect'])) {
-                     $redirect_param = "?redirect=" . urlencode($_POST['redirect']);
+                     $redirect_param = "&redirect=" . urlencode($_POST['redirect']);
                 }
-                $success = "Account created successfully! You can now <a href='login.php$redirect_param'>Login</a>";
+                header("Location: login.php?registered=true" . $redirect_param);
+                exit();
             } else {
                 $error = "Error: " . $conn->error;
             }

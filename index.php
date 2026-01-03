@@ -33,7 +33,8 @@ include 'includes/header.php';
 <div class="section-padding" style="background-color: var(--light-bg);">
     <div class="container">
         <div class="section-title">
-            <h2>Offers</h2>
+            <h2>Exclusive <span class="highlight">Offers</span></h2>
+            <p class="section-slogan">Unbeatable deals for your next adventure. Grab them now!</p>
         </div>
         <div class="offers-grid">
             <?php
@@ -70,38 +71,110 @@ include 'includes/header.php';
         <div class="section-title">
             <h2>Popular Routes</h2>
         </div>
-        <div class="routes-grid">
-            <?php
-            // Fetch popular routes from database
-            $sql = "SELECT * FROM popular_routes ORDER BY created_at DESC LIMIT 4";
-            $result = $conn->query($sql);
+        
+        <!-- Swiper -->
+        <div class="swiper mySwiper">
+            <div class="swiper-wrapper">
+                <?php
+                // Fetch popular routes from the dedicated table (Managed via Admin)
+                $sql = "SELECT * FROM popular_routes ORDER BY created_at DESC LIMIT 10";
+                $result = $conn->query($sql);
 
-            if ($result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-            ?>
-            <a href="search.php?from=<?php echo urlencode($row['source']); ?>&to=<?php echo urlencode($row['destination']); ?>&date=<?php echo date('Y-m-d'); ?>" class="route-card">
-                <div class="route-image" style="height: 160px; overflow: hidden; border-radius: 12px 12px 0 0; margin: -25px -25px 15px -25px;">
-                    <img src="<?php echo $row['image_path']; ?>" alt="<?php echo $row['destination']; ?>" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
+                if ($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
+                        $image = $row['image_path'];
+                        // Fix path if it doesn't start with assets and isn't a URL
+                        if (strpos($image, 'assets/') !== 0 && strpos($image, 'http') !== 0) {
+                             $image = 'assets/images/' . $image;
+                        }
+                ?>
+                <div class="swiper-slide">
+                    <a href="search.php?from=<?php echo urlencode($row['source']); ?>&to=<?php echo urlencode($row['destination']); ?>&date=<?php echo date('Y-m-d'); ?>" class="route-card" style="display: block; text-decoration: none; height: 100%;">
+                        <div class="route-image" style="height: 200px; overflow: hidden; border-radius: 12px 12px 0 0; margin: -25px -25px 15px -25px; position: relative;">
+                            <img src="<?php echo $image; ?>" alt="<?php echo $row['destination']; ?>" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; display: block;">
+                        </div>
+                        <div class="route-header">
+                            <span class="route-city"><?php echo $row['source']; ?></span>
+                            <i class="fas fa-arrow-right route-arrow"></i>
+                            <span class="route-city"><?php echo $row['destination']; ?></span>
+                        </div>
+                        <div class="route-details">
+                            <span><i class="far fa-clock"></i> <?php echo $row['duration']; ?></span>
+                            <span class="route-price">Rs. <?php echo $row['price']; ?></span>
+                        </div>
+                    </a>
                 </div>
-                <div class="route-header">
-                    <span class="route-city"><?php echo $row['source']; ?></span>
-                    <i class="fas fa-arrow-right route-arrow"></i>
-                    <span class="route-city"><?php echo $row['destination']; ?></span>
-                </div>
-                <div class="route-details">
-                    <span><i class="far fa-clock"></i> <?php echo $row['duration']; ?></span>
-                    <span class="route-price">Rs. <?php echo $row['price']; ?></span>
-                </div>
-            </a>
-            <?php 
-                }
-            } else {
-                echo "<p>No popular routes added yet.</p>";
-            } 
-            ?>
+                <?php 
+                    }
+                } else {
+                     echo "<p class='text-center' style='width:100%;'>No popular routes added yet. Check Admin Panel.</p>";
+                } 
+                ?>
+            </div>
+            
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
         </div>
     </div>
 </div>
+
+<!-- Swiper CSS & JS (Scoped locally if needed, but linking generally) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<style>
+    .swiper {
+        width: 100%;
+        padding-bottom: 50px; /* Space for pagination */
+    }
+    .swiper-slide {
+        background-position: center;
+        background-size: cover;
+        /* width: 300px;  <-- REMOVED: This causes overlap issues. Swiper handles width. */
+        height: auto;
+    }
+    .swiper-pagination-bullet-active {
+        background: var(--primary-color, #4CAF50);
+    }
+    .swiper-button-next, .swiper-button-prev {
+        color: var(--primary-color, #4CAF50);
+    }
+</style>
+
+<script>
+    var swiper = new Swiper(".mySwiper", {
+        slidesPerView: 1,
+        spaceBetween: 30,
+        grabCursor: true,
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        breakpoints: {
+            640: {
+                slidesPerView: 2,
+                spaceBetween: 20,
+            },
+            768: {
+                slidesPerView: 2,
+                spaceBetween: 30,
+            },
+            1024: {
+                slidesPerView: 3,
+                spaceBetween: 30,
+            },
+            1200: {
+                slidesPerView: 4,
+                spaceBetween: 30,
+            },
+        },
+    });
+</script>
 
 
 <!-- Amenities Section -->
@@ -151,36 +224,32 @@ include 'includes/header.php';
             <h2>Our Premium Fleet</h2>
         </div>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
-             <!-- VIP -->
-             <div class="bus-card" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08);">
-                <div style="height: 220px; overflow: hidden;">
-                    <img src="assets/images/vip_bus.png" alt="VIP Bus" style="width: 100%; height: 100%; object-fit: cover;">
+            <?php
+            $fleet_sql = "SELECT * FROM fleet ORDER BY created_at ASC";
+            $fleet_result = $conn->query($fleet_sql);
+            
+            if ($fleet_result->num_rows > 0) {
+                while($item = $fleet_result->fetch_assoc()) {
+                    $f_image = $item['image_path'];
+                    if (strpos($f_image, 'assets/') !== 0 && strpos($f_image, 'http') !== 0) {
+                         $f_image = 'assets/images/' . $f_image;
+                    }
+            ?>
+            <div class="bus-card" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08); display: flex; flex-direction: column;">
+                <div style="height: 250px; width: 100%; overflow: hidden;">
+                    <img src="<?php echo $f_image; ?>" alt="<?php echo $item['title']; ?>" style="width: 100%; height: 100%; object-fit: cover; display: block;">
                 </div>
                 <div style="padding: 25px;">
-                    <h3 style="color: var(--secondary-color); margin-bottom: 10px;">VIP / Sofa Bus</h3>
-                    <p style="color: #666; font-size: 0.95rem;">2x1 Sofa Seating • Air Suspension</p>
+                    <h3 style="color: var(--secondary-color); margin-bottom: 10px;"><?php echo $item['title']; ?></h3>
+                    <p style="color: #666; font-size: 0.95rem;"><?php echo $item['description']; ?></p>
                 </div>
             </div>
-            <!-- Deluxe -->
-            <div class="bus-card" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08);">
-                <div style="height: 220px; overflow: hidden;">
-                    <img src="assets/images/deluxe_bus.png" alt="Deluxe Bus" style="width: 100%; height: 100%; object-fit: cover;">
-                </div>
-                <div style="padding: 25px;">
-                    <h3 style="color: var(--secondary-color); margin-bottom: 10px;">Deluxe Bus</h3>
-                    <p style="color: #666; font-size: 0.95rem;">2x2 Mini Sofa • AC • Wifi</p>
-                </div>
-            </div>
-            <!-- Standard -->
-            <div class="bus-card" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08);">
-                <div style="height: 220px; overflow: hidden;">
-                    <img src="assets/images/bus.png" alt="Standard Bus" style="width: 100%; height: 100%; object-fit: cover;">
-                </div>
-                <div style="padding: 25px;">
-                    <h3 style="color: var(--secondary-color); margin-bottom: 10px;">Standard Bus</h3>
-                    <p style="color: #666; font-size: 0.95rem;">2x2 Standard • Budget Friendly</p>
-                </div>
-            </div>
+            <?php 
+                }
+            } else {
+                echo "<p>No fleet information available.</p>";
+            }
+            ?>
         </div>
 
     </div>

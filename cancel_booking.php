@@ -30,17 +30,16 @@ if ($result->num_rows > 0) {
     // Process cancellation
     $update = "UPDATE bookings SET payment_status = 'cancelled' WHERE id = '$booking_id'";
     if ($conn->query($update) === TRUE) {
-        // Optionally: Logic to release seat in routes (if seat availability is tracked separately by count, but here it's checked by booking table)
-        // Since we check `bookings` table to see if seat is taken, changing status to 'cancelled' 
-        // implies we should also check status when booking. 
-        // IMPORTANT: The `book.php` logic (step 49) checks:
-        // $booked_query = "SELECT seat_number FROM bookings WHERE route_id = $route_id";
-        // It DOES NOT exclude cancelled bookings.
-        // So I must Delete the row OR update the query in book.php.
-        // Updating status to 'cancelled' is better for records.
-        // I will need to update book.php too to filter out cancelled bookings.
         
-        header("Location: my_tickets.php?msg=Ticket cancelled successfully.");
+        // --- Notification Logic ---
+        $msg_user = "Ticket #$booking_id Cancelled Successfully.";
+        $conn->query("INSERT INTO notifications (user_id, type, message) VALUES ('$user_id', 'warning', '$msg_user')");
+        
+        $msg_admin = "Cancellation Alert! User ID: $user_id cancelled Ticket #$booking_id.";
+        $conn->query("INSERT INTO notifications (user_id, type, message) VALUES (NULL, 'danger', '$msg_admin')");
+        // --------------------------
+
+        header("Location: my_tickets.php?msg=" . urlencode("Ticket cancelled successfully. Notification sent."));
     } else {
         header("Location: my_tickets.php?error=Error cancelling ticket.");
     }

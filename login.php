@@ -45,6 +45,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <p>Welcome back to QuickTicket</p>
         </div>
         
+        <?php if(isset($_GET['registered']) && $_GET['registered'] == 'true'): ?>
+            <div class="alert alert-success" style="color: #155724; background-color: #d4edda; border-color: #c3e6cb; padding: 15px; margin-bottom: 20px; border: 1px solid transparent; border-radius: 4px;">
+                Your account was successfully created! You can now login.
+            </div>
+        <?php endif; ?>
+        
         <?php if($error): ?>
             <div class="alert alert-danger" style="color: red; background: #ffe6e6; padding: 10px; border-radius: 4px; margin-bottom: 15px;">
                 <?php echo $error; ?>
