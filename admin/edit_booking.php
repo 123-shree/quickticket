@@ -34,6 +34,54 @@ $routes_result = $conn->query($routes_sql);
             </div>
 
             <div class="form-group">
+                <label for="passenger_name">Passenger Name:</label>
+                <input type="text" name="passenger_name" id="passenger_name" class="form-control" value="<?php echo $booking['passenger_name']; ?>" required style="width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #ddd;">
+            </div>
+
+            <div class="form-group">
+                <label for="contact_number">Contact Number:</label>
+                <input type="text" name="contact_number" id="contact_number" class="form-control" value="<?php echo $booking['contact_number']; ?>" required style="width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #ddd;">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" name="email" id="email" class="form-control" value="<?php echo isset($booking['email']) ? $booking['email'] : ''; ?>" style="width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #ddd;">
+            </div>
+
+            <div class="form-group">
+                <label for="status">Booking Status:</label>
+                <select name="status" id="status" class="form-control" style="width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #ddd;">
+                    <option value="pending" <?php if($booking['status'] == 'pending') echo 'selected'; ?>>Pending</option>
+                    <option value="confirmed" <?php if($booking['status'] == 'confirmed') echo 'selected'; ?>>Confirmed</option>
+                    <option value="cancelled" <?php if($booking['status'] == 'cancelled') echo 'selected'; ?>>Cancelled</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="payment_status">Payment Status:</label>
+                <select name="payment_status" id="payment_status" class="form-control" style="width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #ddd;">
+                    <option value="pending" <?php if($booking['payment_status'] == 'pending') echo 'selected'; ?>>Pending</option>
+                    <option value="partial" <?php if($booking['payment_status'] == 'partial') echo 'selected'; ?>>Partial (Advance)</option>
+                    <option value="paid" <?php if($booking['payment_status'] == 'paid') echo 'selected'; ?>>Paid (Full)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="pickup_location">Pickup Location:</label>
+                <input type="text" name="pickup_location" id="pickup_location" class="form-control" value="<?php echo isset($booking['pickup_location']) ? $booking['pickup_location'] : ''; ?>" style="width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #ddd;">
+            </div>
+
+            <div class="form-group">
+                <label for="drop_location">Drop Location:</label>
+                <input type="text" name="drop_location" id="drop_location" class="form-control" value="<?php echo isset($booking['drop_location']) ? $booking['drop_location'] : ''; ?>" style="width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #ddd;">
+            </div>
+
+            <div class="form-group">
+                <label for="seat_number">Seat Number:</label>
+                <input type="text" name="seat_number" id="seat_number" class="form-control" value="<?php echo $booking['seat_number']; ?>" required style="width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #ddd;">
+            </div>
+
+            <div class="form-group">
                 <label for="route_id">Select New Route:</label>
                 <select name="route_id" id="route_id" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ddd;">
                     <?php

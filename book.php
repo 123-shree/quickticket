@@ -359,6 +359,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="form-group" style="margin-bottom: 15px;">
                         <input type="text" name="pickup_location" class="form-control" placeholder="Pickup Location (e.g. Kalanki)" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;">
                     </div>
+
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <input type="text" name="drop_location" class="form-control" placeholder="Drop Location (e.g. Bus Park)" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;">
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <input type="email" name="email" class="form-control" placeholder="Email Address (Optional)" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;">
+                    </div>
                     
                     <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; font-weight: bold; background: var(--primary-color); border: none; border-radius: 6px; cursor: pointer;">Proceed to Payment</button>
                 </div>

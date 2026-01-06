@@ -1,0 +1,85 @@
+mid_defense_viva_qa.txt
+======================================================
+QUICKTICKET - MID DEFENSE VIVA QUESTIONS & ANSWERS
+======================================================
+
+Q1: What is the title of your project and what is its main objective?
+Answer: 
+My project title is "QuickTicket". It is a web-based bus ticket booking system designed to digitize the traditional manual booking process. The main objective is to allow users to search for buses, view availability, and book tickets online from anywhere, while giving bus operators an admin panel to manage their fleet and schedules efficiently.
+
+Q2: What technologies did you use in this project?
+Answer:
+- Frontend: HTML for structure, CSS for styling (with responsive design), and JavaScript for interactivity (using libraries like SwiperJS for sliders and AOS for animations).
+- Backend: Core PHP for server-side logic.
+- Database: MySQL for storing user data, booking details, and bus information.
+- Server: Apache (XAMPP environment).
+
+Q3: Can you explain the system architecture or flow?
+Answer:
+The system follows a typical client-server architecture:
+1. The User interacts with the Frontend (Search buses, View offers).
+2. Requests are sent to the PHP Backend.
+3. The Backend queries the MySQL Database to fetch or save data (like checking available seats or saving a booking).
+4. The requested information is displayed back to the user.
+
+Q4: What are the key modules or features of your system?
+Answer:
+The system has two main sides:
+1. Client Side: User Registration/Login, Bus Search (Source/Destination), View Details (Amenities/Price), and Booking.
+2. Admin Side: Dashboard, Manage Buses, Manage Routes, Manage Fleet, and View Bookings.
+
+Q5: (Database) How many tables do you have and what are the important ones?
+Answer:
+I have around 8 key tables. The most important ones are:
+- `users`: Stores admin and customer details.
+- `buses`: Stores bus details like name, type, and total seats.
+- `routes`: Links buses to source and destination with pricing and timing.
+- `bookings`: Stores ticket information linking users to specific routes and seats.
+- `fleet`: Stores dynamic info about our premium bus collection for the homepage.
+- `offers` & `popular_routes`: For dynamic homepage content.
+
+Q6: How did you handle password security?
+Answer:
+I used PHP's built-in `password_hash()` function to encrypt passwords before storing them in the database, and `password_verify()` to check them during login. We do not store plain text passwords.
+
+Q7: What is the `bookings` table structure?
+Answer:
+The bookings table connects a `user_id` and a `route_id`. It stores the `seat_number`, `booking_date`, `payment_status` (pending/paid), and passenger details like `passenger_name` and `contact_number`.
+
+Q8: How does the search functionality work?
+Answer:
+When a user searches for "From", "To", and a "Date", the backend runs a SQL SELECT query on the `routes` table using a WHERE clause to match the source, destination, and available dates.
+
+Q9: What were the main challenges you faced during development?
+Answer:
+- One challenge was handling the dynamic relationship between buses and routes (Database Normalization).
+- Another was implementing the slider/carousel features (SwiperJS) to make the homepage dynamic and responsive using data from the database.
+- Ensuring the design looked professional and responsive across mobile devices was also a focus.
+
+Q10: What is the future scope of this project? (What will you add later?)
+Answer:
+For the final defense, I plan to add:
+- Real-time online payment integration (like eSewa or Khalti).
+- Seat layout visualization (visual seat picker).
+- Email or SMS booking confirmation.
+- Real-time bus tracking using GPS integration concepts.
+
+Q11: Why did you choose PHP over other languages like Python or Node.js?
+Answer:
+I chose PHP because it is specifically designed for web development, integrates seamlessly with MySQL, and is supported by almost all hosting providers. It was also a great way for me to learn the fundamentals of server-side programming without the complexity of modern frameworks initially.
+
+Questions specific to your code changes:
+--------------------------------------
+Q12: How are the "Premium Fleet" and "Offers" on the homepage managed?
+Answer:
+They are fully dynamic. I created an Admin Panel section where the admin can Add, Edit, or Delete offers and fleet items. These are stored in the database and fetched via PHP loops on the index page to display in the sliders.
+
+Q13: What does the 'SafeToAutoRun' or 'turbo' comments mean in your workflow files? (If they ask about your development process)
+Answer:
+That relates to the AI tools I used to assist in development, helping me automate repetitive command-line tasks.
+
+--------------------------------------
+TIPS FOR VIVA:
+1. Be confident. If you don't know an answer, say "I haven't implemented that part yet, but I am researching it for the next phase."
+2. Keep answers short and to the point.
+3. Focus on what is WORKING in your project right now.

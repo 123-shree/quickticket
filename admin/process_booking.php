@@ -13,9 +13,25 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
     $action = $_GET['action'];
 
     if ($action == 'confirm') {
-        $sql = "UPDATE bookings SET payment_status='paid' WHERE id=$id";
+        $sql = "UPDATE bookings SET payment_status='paid', status='confirmed' WHERE id=$id";
         if ($conn->query($sql) === TRUE) {
-            header("Location: bookings.php?msg=Booking confirmed");
+            header("Location: bookings.php?msg=Booking payment done and confirmed");
+        } else {
+            echo "Error updating record: " . $conn->error;
+        }
+    } elseif ($action == 'confirm_booking') {
+        // Manually confirm booking without payment change
+        $sql = "UPDATE bookings SET status='confirmed' WHERE id=$id";
+        if ($conn->query($sql) === TRUE) {
+            header("Location: bookings.php?msg=Booking status set to Confirmed");
+        } else {
+            echo "Error updating record: " . $conn->error;
+        }
+    } elseif ($action == 'pending_booking') {
+        // Manually set booking to pending
+        $sql = "UPDATE bookings SET status='pending' WHERE id=$id";
+        if ($conn->query($sql) === TRUE) {
+            header("Location: bookings.php?msg=Booking status set to Pending");
         } else {
             echo "Error updating record: " . $conn->error;
         }
@@ -29,15 +45,39 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
     }
 }
 
-if (isset($_POST['update_route'])) {
+    if (isset($_POST['update_route'])) {
     $booking_id = $_POST['booking_id'];
     $new_route_id = $_POST['route_id'];
+    $passenger_name = $_POST['passenger_name'];
+    $contact_number = $_POST['contact_number'];
+    $email = $_POST['email'];
+    $seat_number = $_POST['seat_number'];
+    $status = $_POST['status'];
+    $payment_status = $_POST['payment_status'];
+    $pickup_location = $_POST['pickup_location'];
+    $drop_location = $_POST['drop_location'];
 
-    $sql = "UPDATE bookings SET route_id=$new_route_id WHERE id=$booking_id";
+    // Auto-confirm if payment is paid or partial
+    if (($payment_status == 'paid' || $payment_status == 'partial') && $status == 'pending') {
+        $status = 'confirmed';
+    }
+
+    $sql = "UPDATE bookings SET 
+            route_id='$new_route_id', 
+            passenger_name='$passenger_name', 
+            contact_number='$contact_number', 
+            email='$email',
+            seat_number='$seat_number',
+            status='$status',
+            payment_status='$payment_status',
+            pickup_location='$pickup_location',
+            drop_location='$drop_location' 
+            WHERE id=$booking_id";
+
     if ($conn->query($sql) === TRUE) {
-        header("Location: bookings.php?msg=Route updated successfully");
+        header("Location: bookings.php?msg=Booking updated successfully");
     } else {
-        echo "Error updating route: " . $conn->error;
+        echo "Error updating booking: " . $conn->error;
     }
 }
 

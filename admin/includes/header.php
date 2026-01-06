@@ -65,6 +65,11 @@ if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['admin', 'agen
                         <?php if($pending_bookings_count > 0) echo "<span class='badge badge-warning'>$pending_bookings_count</span>"; ?>
                     </div>
                 </a>
+                <a href="customer_insights.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'customer_insights.php' ? 'active' : ''; ?>">
+                    <div style="display: flex; align-items: center; width: 100%;">
+                        <i class="fas fa-chart-line"></i> <span style="margin-left: 12px;">Customer Insights</span>
+                    </div>
+                </a>
                 <a href="offers.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'offers.php' ? 'active' : ''; ?>">
                     <div style="display: flex; align-items: center; width: 100%;">
                         <i class="fas fa-gift"></i> <span style="margin-left: 12px;">Offers</span>

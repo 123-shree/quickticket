@@ -22,6 +22,8 @@ $total_seats = count($selected_seats);
 $passenger_name = isset($_POST['passenger_name']) ? $_POST['passenger_name'] : '';
 $contact_number = isset($_POST['contact_number']) ? $_POST['contact_number'] : '';
 $pickup_location = isset($_POST['pickup_location']) ? $_POST['pickup_location'] : '';
+$drop_location = isset($_POST['drop_location']) ? $_POST['drop_location'] : '';
+$email = isset($_POST['email']) ? $_POST['email'] : '';
 
 // Fetch route details
 $route_query = "SELECT r.*, b.bus_name, b.bus_number 
@@ -32,6 +34,23 @@ $route_result = $conn->query($route_query);
 $route = $route_result->fetch_assoc();
 
 $total_price = $total_seats * $route['price'];
+
+// --- LOYALTY DISCOUNT LOGIC ---
+$discount_amount = 0;
+$discount_applied = false;
+
+// Check if user has bookings >= 3
+$loyalty_check_sql = "SELECT COUNT(*) as booking_count FROM bookings WHERE user_id='$user_id' AND status='confirmed'";
+$loyalty_check = $conn->query($loyalty_check_sql);
+$loyalty_data = $loyalty_check->fetch_assoc();
+
+if ($loyalty_data['booking_count'] >= 3) {
+    $discount_amount = $total_price * 0.05; // 5% Discount
+    $total_price = $total_price - $discount_amount;
+    $discount_applied = true;
+}
+// -----------------------------
+
 $min_payment = $total_price / 2; // Half payment allowed
 
 $error = "";
@@ -47,6 +66,8 @@ if (isset($_POST['confirm_payment'])) {
     $passenger_name = mysqli_real_escape_string($conn, $_POST['passenger_name']);
     $contact_number = mysqli_real_escape_string($conn, $_POST['contact_number']);
     $pickup_location = mysqli_real_escape_string($conn, $_POST['pickup_location']);
+    $drop_location = mysqli_real_escape_string($conn, $_POST['drop_location']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
 
     // Server-side validation
     if ($paid_amount < $min_payment) {
@@ -74,8 +95,8 @@ if (isset($_POST['confirm_payment'])) {
         } else {
             // Insert bookings
             foreach ($selected_seats as $seat) {
-             $sql = "INSERT INTO bookings (user_id, route_id, seat_number, payment_status, payment_method, transaction_id, paid_amount, passenger_name, contact_number, pickup_location) 
-                        VALUES ('$user_id', '$route_id', '$seat', '$payment_status', '$payment_method', '$transaction_id', '$paid_amount', '$passenger_name', '$contact_number', '$pickup_location')";
+             $sql = "INSERT INTO bookings (user_id, route_id, seat_number, payment_status, payment_method, transaction_id, paid_amount, passenger_name, contact_number, pickup_location, drop_location, email) 
+                        VALUES ('$user_id', '$route_id', '$seat', '$payment_status', '$payment_method', '$transaction_id', '$paid_amount', '$passenger_name', '$contact_number', '$pickup_location', '$drop_location', '$email')";
                 $conn->query($sql);
             }
             
@@ -210,8 +231,15 @@ if (isset($_POST['confirm_payment'])) {
             <hr>
             <p><strong>Passenger:</strong> <?php echo htmlspecialchars($passenger_name); ?></p>
             <p><strong>Contact:</strong> <?php echo htmlspecialchars($contact_number); ?></p>
+            <p><strong>Email:</strong> <?php echo !empty($email) ? htmlspecialchars($email) : 'N/A'; ?></p>
             <p><strong>Pickup:</strong> <?php echo htmlspecialchars($pickup_location); ?></p>
+            <p><strong>Drop:</strong> <?php echo !empty($drop_location) ? htmlspecialchars($drop_location) : 'N/A'; ?></p>
             <hr>
+            <?php if($discount_applied): ?>
+                <p style="color: #28a745; font-weight: bold;"><i class="fas fa-certificate"></i> Gold Member Discount (5%) Applied!</p>
+                <p>Original Price: <del>Rs. <?php echo ($total_price + $discount_amount); ?></del></p>
+                <p>Discount: - Rs. <?php echo $discount_amount; ?></p>
+            <?php endif; ?>
             <p style="font-size: 1.2rem;"><strong>Total Price:</strong> <span style="color: var(--primary-color);">Rs. <?php echo $total_price; ?></span></p>
             <p><small class="text-muted">Minimum advance payment required: Rs. <?php echo $min_payment; ?></small></p>
         </div>
@@ -231,6 +259,8 @@ if (isset($_POST['confirm_payment'])) {
                 <input type="hidden" name="passenger_name" value="<?php echo htmlspecialchars($passenger_name); ?>">
                 <input type="hidden" name="contact_number" value="<?php echo htmlspecialchars($contact_number); ?>">
                 <input type="hidden" name="pickup_location" value="<?php echo htmlspecialchars($pickup_location); ?>">
+                <input type="hidden" name="drop_location" value="<?php echo htmlspecialchars($drop_location); ?>">
+                <input type="hidden" name="email" value="<?php echo htmlspecialchars($email); ?>">
 
                 <h3 style="margin-bottom: 20px; font-size: 1.2rem; border-bottom: 2px solid var(--primary-color); display: inline-block; padding-bottom: 5px;">Payment</h3>
 

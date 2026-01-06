@@ -1,0 +1,76 @@
+login_signup_process.txt
+======================================================
+STEP-BY-STEP: LOGIN & SIGNUP PROCESS & DATABASE FLOW
+======================================================
+For your Viva/Interview, you can explain the process like this:
+
+PART 1: SIGNUP PROCESS (How data goes TO the database)
+------------------------------------------------------
+1. User Input:
+   - The user opens the Signup page (`signup.php`).
+   - They fill in the form (Name, Email, Password, Confirm Password).
+   - They click the "Create Account" button.
+
+2. Data Submission (Frontend to Backend):
+   - The form sends a `POST` request to the server.
+   - The PHP code checks if the request method is POST.
+
+3. Validation & Security (Backend Processing):
+   - We use `mysqli_real_escape_string()` to clean the input data (Name, Email) to prevent SQL Injection attacks.
+   - We check if "Password" matches "Confirm Password".
+   - We run a SQL query (`SELECT id FROM users...`) to check if the email already exists in our database.
+
+4. Password Hashing (Crucial Step):
+   - If the email is new, we DO NOT save the plain password.
+   - We use the function `password_hash($password, PASSWORD_DEFAULT)` to convert the password into a secure random string (hash). This ensures that even if our database is hacked, no one can read the users' passwords.
+
+5. Saving to Database (SQL INSERT):
+   - We write a SQL query: 
+     `INSERT INTO users (name, email, password) VALUES (...)`
+   - The PHP script executes this query using `$conn->query($sql)`.
+   - The data is now physically stored in the `users` table in our MySQL database.
+
+6. Completion:
+   - If successful, the user is redirected to `login.php` with a success message.
+
+PART 2: LOGIN PROCESS (How data is verified)
+--------------------------------------------
+1. User Input:
+   - User enters Email and Password on `login.php`.
+   - Clicks "Login".
+
+2. Fetching User Data (Database to Backend):
+   - The PHP script receives the email.
+   - It runs a SQL query: 
+     `SELECT * FROM users WHERE email = '$email'`
+   - This looks for a row in the database that matches the email.
+
+3. Verification:
+   - If a user is found, the database returns the user's data (ID, Name, Hashed Password, Role).
+   - We use `password_verify($input_password, $hashed_password_from_db)` to compare what the user typed with the encrypted password in the database.
+
+4. Session Creation:
+   - If the password matches, we start a SESSION (`session_start()`).
+   - We store important info like `$_SESSION['user_id']` and `$_SESSION['role']` in the browser's memory (cookies) so the user stays logged in as they browse different pages.
+
+PART 3: GENERAL DATA FLOW (Database to Frontend)
+------------------------------------------------
+(Example: Displaying "Popular Routes" on Homepage)
+
+1. Client Request: 
+   - User visits `index.php`.
+   
+2. Backend Query:
+   - PHP writes a query: `SELECT * FROM popular_routes`.
+   - It sends this query to the Database.
+
+3. Database Response:
+   - The Database finds all the requested rows and returns them to PHP as a "Result Set".
+
+4. Rendering (Backend to Frontend):
+   - PHP uses a `while` loop (`while($row = $result->fetch_assoc())`) to go through each row of data.
+   - Inside the loop, it uses `echo` to print HTML code mixed with the data (e.g., `echo $row['destination'];`).
+   - The server sends the final HTML page to the user's browser to display.
+
+Summary for Viva:
+"Sir/Ma'am, the flow is simple: The Frontend sends a POST request. PHP sanitizes the data and hashes the password for security. Then it executes an INSERT query to save it to MySQL. For login, we SELECT the user by email and use `password_verify` to check credentials. If valid, we start a Session."
