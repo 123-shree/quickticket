@@ -62,7 +62,25 @@ session_start();
             <a href="contact.php">Contact Us</a>
             <?php if(isset($_SESSION['user_id'])): ?>
                 <a href="my_tickets.php">My Tickets</a>
-                <a href="profile.php"><i class="fas fa-user-circle"></i> Profile</a>
+                <?php
+                // Fetch profile image for nav
+                $nav_profile_img = '';
+                if(isset($conn) && isset($_SESSION['user_id'])) {
+                    $nav_uid = $_SESSION['user_id'];
+                    $nav_res = $conn->query("SELECT profile_image FROM users WHERE id='$nav_uid'");
+                    if($nav_res && $nav_row = $nav_res->fetch_assoc()) {
+                        $nav_profile_img = $nav_row['profile_image'];
+                    }
+                }
+                ?>
+                <a href="profile.php" style="display: flex; align-items: center; gap: 5px;">
+                    <?php if(!empty($nav_profile_img)): ?>
+                        <img src="<?php echo $nav_profile_img; ?>" style="width: 25px; height: 25px; border-radius: 50%; object-fit: cover; border: 1px solid white;">
+                    <?php else: ?>
+                        <i class="fas fa-user-circle"></i>
+                    <?php endif; ?>
+                    Profile
+                </a>
                 <a href="logout.php" class="btn btn-outline">Logout</a>
             <?php else: ?>
                 <a href="login.php" class="btn btn-outline">Login</a>
